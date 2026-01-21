@@ -79,8 +79,8 @@
 
             <!-- Auth Actions -->
             <div class="flex items-center gap-3">
-                <a href="/login" class="text-[14px] font-bold px-4 text-slate-500 hover:text-indigo-600 transition">Log in</a>
-                <a href="/register" class="bg-indigo-600 text-white px-6 py-2.5 rounded-full text-[14px] font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition whitespace-nowrap">
+                <a href="{{ route('login') }}" class="text-[14px] font-bold px-4 text-slate-500 hover:text-indigo-600 transition">Log in</a>
+                <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-6 py-2.5 rounded-full text-[14px] font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition whitespace-nowrap">
                     Sign up free
                 </a>
             </div>
@@ -321,7 +321,7 @@
                     <h2 class="text-4xl md:text-6xl font-[900] text-white mb-8 tracking-tighter leading-[1.1]">Powerful project management, <br><span class="text-indigo-400">100% free for everyone.</span></h2>
                     <p class="text-lg text-slate-400 mb-12 max-w-xl mx-auto leading-relaxed">No subscriptions, no hidden fees, and no credit cards. Masar is built to empower teams and individuals to achieve more, completely free.</p>
                     <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
-                        <a href="/register" class="w-full sm:w-auto bg-indigo-600 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-indigo-500 hover:scale-105 transition-all shadow-xl shadow-indigo-900/20">Get started now — It's free</a>
+                        <a href="{{ route('register') }}" class="w-full sm:w-auto bg-indigo-600 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-indigo-500 hover:scale-105 transition-all shadow-xl shadow-indigo-900/20">Get started now — It's free</a>
                         <a href="#" class="w-full sm:w-auto bg-white/5 border border-white/10 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-white/10 transition-all">View Documentation</a>
                     </div>
 
