@@ -9,7 +9,6 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <style>
         body { font-family: 'Inter', sans-serif; }
         .nav-blur { background: rgba(255, 255, 255, 0.8); backdrop-filter: saturate(180%) blur(20px); }

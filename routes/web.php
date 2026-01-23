@@ -23,6 +23,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+    Route::post('/projects/{project}/tasks', [ProjectController::class, 'storeTask'])->name('tasks.store');
+    Route::get('/projects/{project}/tasks/create', [ProjectController::class, 'createTask'])->name('tasks.create');
+    Route::post('/tasks/update-status', [ProjectController::class, 'updateTaskStatus'])->name('tasks.updateStatus');
+    Route::post('/projects/{project}/invite', [ProjectController::class, 'inviteMember'])->name('projects.invite');
+    Route::get('/projects/{project}/join/{email}', [ProjectController::class, 'acceptInvitation'])->name('projects.accept-invitation');
 });
 Route::middleware(['auth'])->prefix('setup')->group(function () {
     Route::get('/workspace', [OnboardingController::class, 'workspace'])->name('setup.workspace');
@@ -34,3 +40,4 @@ Route::middleware(['auth'])->prefix('setup')->group(function () {
     Route::get('/first-project', [OnboardingController::class, 'project'])->name('setup.project');
     Route::post('/first-project', [OnboardingController::class, 'storeProject']);
 });
+

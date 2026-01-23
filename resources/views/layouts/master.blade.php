@@ -1,51 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masar | Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Masar | Project OS</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        [x-cloak] { display: none !important; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fcfcfd;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
     </style>
 </head>
-<body class="bg-slate-50 antialiased">
+<!-- نغير h-screen ليكون مرناً ونسمح بالسكرول في المحتوى فقط -->
 
+<body class="antialiased bg-[#fcfcfd] text-slate-900 font-['Inter']">
     <div x-data="{ isCompact: false, openMobile: false }" class="relative flex h-screen overflow-hidden">
-        
-        <!-- خلفية سوداء للجوال فقط -->
-        <div x-show="openMobile" 
-             x-cloak
-             @click="openMobile = false" 
-             class="fixed inset-0 bg-slate-900/50 z-[45] lg:hidden backdrop-blur-sm transition-opacity">
-        </div>
 
-        <!-- Sidebar Section -->
-        <aside 
-            :class="{
-                'w-72': !isCompact,
-                'w-20': isCompact,
-                'translate-x-0': openMobile,
-                '-translate-x-full': !openMobile
-            }"
-            class="fixed inset-y-0 left-0 z-50 bg-white border-r border-slate-100 transition-all duration-300 transform lg:translate-x-0 lg:static shadow-2xl lg:shadow-none flex flex-col h-full">
+        <!-- Sidebar: ثابت لا يتحرك -->
+        <aside :class="{ 'w-64': !isCompact, 'w-20': isCompact }"
+            class="bg-white border-r border-slate-100 flex flex-col h-full shrink-0 transition-all duration-300">
             @include('layouts.partials.sidebar')
         </aside>
 
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+        <!-- المنطقة الرئيسية: هي التي تسمح بالتمرير -->
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             @include('layouts.partials.navbar')
 
-            <main class="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+            <!-- محتوى الصفحة مع تفعيل السكرول الرأسي -->
+            <main class="flex-1 overflow-y-auto custom-scroll">
                 @yield('content')
             </main>
         </div>
     </div>
-
-    <script> lucide.createIcons(); </script>
 </body>
+
 </html>

@@ -1,106 +1,124 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-8">
+<div class="max-w-7xl mx-auto px-6 py-10">
     
+    <style>
+        /* استخدام خط Inter العالمي - مريح جداً للعين وطبيعي */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; color: #1e293b; }
+    </style>
+
     <!-- Page Header -->
-    <header class="flex items-center justify-between mb-10 pb-6 border-b border-slate-100">
+    <header class="flex items-center justify-between mb-12 pb-6 border-b border-slate-100">
         <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Projects</h1>
-            <p class="text-[13px] text-slate-400 font-medium mt-1 uppercase tracking-widest">Management System</p>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Projects</h1>
+            <p class="text-sm text-slate-500 mt-1">Manage your team's workspace and productivity.</p>
         </div>
         
-        <!-- Updated Button Color to Cyan -->
         <button onclick="openModal()" 
-                class="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-cyan-100 active:scale-95">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M12 4v16m8-8H4"/></svg>
+                class="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 shadow-md shadow-cyan-100 active:scale-95">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>
             New Project
         </button>
     </header>
 
     <!-- Projects Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         @forelse($projects as $project)
-        <div class="bg-white rounded-[2rem] border border-slate-200/50 p-6 hover:border-cyan-300 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 flex flex-col group relative overflow-hidden">
+        <a href="{{ route('projects.show', $project->id) }}" class="bg-white rounded-3xl border border-slate-200/60 p-8 hover:border-cyan-400 hover:shadow-xl transition-all duration-300 flex flex-col group relative">
             
-            <!-- Project Status Tag -->
             <div class="flex justify-between items-center mb-6">
-                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $project->created_at->format('M d, Y') }}</span>
-                <span class="px-3 py-1 bg-cyan-50 text-cyan-600 rounded-lg text-[9px] font-black uppercase tracking-tighter">
-                    {{ $project->status }}
+                <span class="text-xs font-medium text-slate-400">{{ $project->created_at->format('M d, Y') }}</span>
+                <span class="px-3 py-1 bg-cyan-50 text-cyan-600 rounded-full text-[11px] font-bold">
+                    {{ ucfirst($project->status) }}
                 </span>
             </div>
 
-            <!-- Project Info -->
-            <div class="mb-8">
-                <h3 class="text-xl font-black text-slate-900 group-hover:text-cyan-600 transition-colors mb-2">
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-900 group-hover:text-cyan-600 transition-colors mb-2">
                     {{ $project->name }}
                 </h3>
-                <p class="text-[13px] text-slate-500 leading-relaxed line-clamp-2 font-medium">
-                    {{ $project->description ?? 'No description provided. Click to add details and milestones.' }}
+                <p class="text-[14px] text-slate-500 leading-relaxed line-clamp-3">
+                    {{ $project->description ?? 'No description provided for this project. Start by adding milestones and goals to help your team stay on track.' }}
                 </p>
             </div>
 
-            <!-- Team & Progress Footer -->
             <div class="mt-auto pt-6 border-t border-slate-50">
                 <div class="flex items-center justify-between mb-4">
-                    <!-- Avatars -->
-                    <div class="flex -space-x-2">
-                        <img src="https://ui-avatars.com/api/?name=User&background=06b6d4&color=fff" class="w-8 h-8 rounded-full border-2 border-white shadow-sm">
-                        <div class="w-8 h-8 rounded-full border-2 border-white bg-slate-50 flex items-center justify-center text-[10px] font-bold text-slate-400">+2</div>
+                    <div class="flex items-center gap-2">
+                         <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=06b6d4&color=fff" 
+                              class="w-8 h-8 rounded-full shadow-sm" title="Project Owner">
+                        <span class="text-xs font-medium text-slate-400 ">Solo workspace</span>
                     </div>
-                    <span class="text-[10px] font-black text-slate-400 uppercase">Progress: {{ $project->progress ?? 0 }}%</span>
+                    <span class="text-xs font-bold text-slate-400">{{ $project->progress ?? 0 }}%</span>
                 </div>
 
-                <!-- Sleek Cyan Progress Bar -->
                 <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                    <div class="bg-cyan-500 h-full rounded-full transition-all duration-1000 shadow-[0_0_8px_rgba(6,182,212,0.4)]" 
+                    <div class="bg-cyan-500 h-full rounded-full transition-all duration-1000 shadow-sm" 
                          style="width: {{ $project->progress ?? 0 }}%"></div>
                 </div>
             </div>
-        </div>
+        </a>
         @empty
-        <div class="col-span-full py-24 text-center bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
-             <div class="text-4xl mb-4 text-slate-300">📂</div>
-             <h3 class="text-lg font-bold text-slate-900">No Projects Found</h3>
-             <p class="text-sm text-slate-400">Start your first journey by clicking the button above.</p>
+        <div class="col-span-full py-20 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+             <h3 class="text-lg font-semibold text-slate-900">Your project list is empty</h3>
+             <p class="text-sm text-slate-400 mt-1">Create your first project to get started.</p>
         </div>
         @endforelse
     </div>
 
-    <!-- The "Human" Modal -->
-    <div id="newProjectModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="closeModal()"></div>
+    <!-- Modal: New Project -->
+<div id="newProjectModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <!-- خلفية ضبابية خفيفة جداً -->
+    <div class="absolute inset-0 bg-slate-900/30 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+    
+    <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md p-10 transform transition-all scale-95 opacity-0 duration-300 border border-slate-50" id="modalContainer">
         
-        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md p-10 transform transition-all scale-95 opacity-0 duration-300 border border-slate-100" id="modalContainer">
-            <div class="mb-8 text-center">
-                <div class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                </div>
-                <h3 class="text-xl font-black text-slate-900">Create Project</h3>
-                <p class="text-[13px] text-slate-400 font-medium mt-1">Organize your tasks and team members.</p>
+        <!-- Header Section -->
+        <div class="text-center mb-10">
+            <!-- Icon -->
+            <div class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path d="M12 4v16m8-8H4"/>
+                </svg>
             </div>
             
-            <form action="{{ route('projects.store') }}" method="POST" class="space-y-6">
-                @csrf
-                <div class="space-y-1.5">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Project Name</label>
-                    <input type="text" name="name" required placeholder="e.g. Website Redesign"
-                           class="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none text-sm font-bold focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all">
-                </div>
-                <div class="space-y-1.5">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Description</label>
-                    <textarea name="description" rows="3" placeholder="What's the goal?"
-                              class="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none text-sm font-bold focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all"></textarea>
-                </div>
-                
-                <div class="flex gap-3 pt-4">
-                    <button type="button" onclick="closeModal()" class="flex-1 py-4 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-all">Cancel</button>
-                    <button type="submit" class="flex-1 bg-cyan-500 text-white py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-cyan-600 shadow-lg shadow-cyan-100 transition-all">Create Now</button>
-                </div>
-            </form>
+            <!-- Title & Subtitle (التعديل هنا) -->
+            <h3 class="text-2xl font-bold text-slate-900 tracking-tight mb-2">New Project</h3>
+            <p class="text-[14px] text-slate-400 font-medium leading-relaxed max-w-[240px] mx-auto">
+                Define your goals and start building with your team today.
+            </p>
         </div>
+        
+        <form action="{{ route('projects.store') }}" method="POST" class="space-y-6">
+            @csrf
+            
+            <div class="space-y-1.5">
+                <label class="text-[11px] font-bold text-slate-400 tracking-widest ml-1">Project Name</label>
+                <input type="text" name="name" required placeholder="e.g. Design System"
+                       class="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none text-sm font-semibold focus:ring-4 focus:ring-cyan-500/10 focus:bg-white outline-none transition-all placeholder:text-slate-300">
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="text-[11px] font-bold text-slate-400 tracking-widest ml-1">Description</label>
+                <textarea name="description" rows="3" placeholder="What are the goals?"
+                          class="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none text-sm font-semibold focus:ring-4 focus:ring-cyan-500/10 focus:bg-white outline-none transition-all placeholder:text-slate-300"></textarea>
+            </div>
+            
+            <div class="flex items-center gap-4 pt-4">
+                <button type="button" onclick="closeModal()" 
+                        class="flex-1 py-4 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors">
+                    Cancel
+                </button>
+                <button type="submit" 
+                        class="flex-2 px-8 py-4 bg-cyan-500 text-white rounded-2xl text-sm font-bold shadow-lg shadow-cyan-100 hover:bg-cyan-600 transition-all active:scale-95">
+                    Create Project
+                </button>
+            </div>
+        </form>
     </div>
+</div>
 </div>
 
 <script>
@@ -114,7 +132,7 @@
         const modal = document.getElementById('newProjectModal');
         const container = document.getElementById('modalContainer');
         container.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        setTimeout(() => { modal.classList.add('hidden'); }, 200);
     }
 </script>
 @endsection

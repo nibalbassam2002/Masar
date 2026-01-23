@@ -3,131 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | Masar</title>
+    <title>Join Masar | Create Account</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            letter-spacing: -0.02em; 
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
         .mesh-gradient {
             background-color: #ffffff;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
-        }
-        .input-style {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1.5px solid #f1f5f9;
-        }
-        .input-style:focus {
-            background: #ffffff;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08);
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
         }
     </style>
 </head>
 <body class="mesh-gradient h-screen flex flex-col antialiased overflow-hidden">
 
     <!-- Top Navigation -->
-    <nav class="p-4 lg:p-5 flex justify-between items-center w-full max-w-[1400px] mx-auto shrink-0">
+    <nav class="p-4 lg:p-6 flex justify-between items-center w-full max-w-[1400px] mx-auto shrink-0">
         <a href="/" class="flex items-center gap-0 group">
-            <img src="{{ asset('image/logo.png') }}" alt="Masar" class="w-8 h-8 object-contain">
-            <span class="text-lg font-[900] tracking-tighter uppercase text-indigo-600 ml-[-4px]">Masar</span>
+            <img src="{{ asset('image/logo.png') }}" alt="Masar" class="w-12 h-12 object-contain">
+            <span class="text-xl font-[900] tracking-tighter uppercase text-indigo-600 ml-[-4px]">Masar</span>
         </a>
-        <div class="text-xs font-bold text-slate-400">
-            Already a member? <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-800 transition-colors">Sign in</a>
+        <div class="text-sm font-bold text-slate-400">
+            Already a member? <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-800 transition-all underline-offset-4">Sign in</a>
         </div>
     </nav>
 
     <main class="flex-1 flex items-center justify-center p-4 min-h-0">
-        <!-- تم ضبط الارتفاع الأقصى لضمان الظهور بالكامل -->
-        <div class="w-full max-w-[1000px] h-full max-h-[660px] grid lg:grid-cols-2 bg-white rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] overflow-hidden border border-slate-100">
+        <div class="w-full max-w-[1000px] h-full max-h-[720px] grid lg:grid-cols-2 bg-white rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] overflow-hidden border border-slate-100">
             
-            <!-- Left Side: Visual -->
-            <div class="relative bg-slate-50 p-6 flex items-center justify-center overflow-hidden">
-                <div class="absolute top-0 right-0 w-80 h-80 bg-indigo-100/40 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+            <!-- Left Side: Visual Identity -->
+            <div class="relative bg-slate-50 p-10 flex items-center justify-center overflow-hidden">
+                <div class="absolute top-0 right-0 w-80 h-80 bg-indigo-100/50 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
                 
-                <div class="relative w-full h-full flex flex-col items-center justify-center text-center">
-                    <div class="relative group w-full h-full flex items-center justify-center">
-                        <div class="absolute inset-0 bg-indigo-500/5 rounded-full blur-3xl group-hover:bg-indigo-500/10 transition duration-700"></div>
-                        <img src="{{ asset('image/6164736.png') }}" 
-                             alt="Join Masar" 
-                             class="relative max-w-[85%] max-h-[85%] object-contain transform hover:scale-105 transition duration-700">
-                    </div>
+                <div class="relative w-full h-full flex flex-col items-center justify-center group">
+                    <div class="absolute -inset-4 bg-cyan-500/5 rounded-[2.5rem] blur-2xl group-hover:bg-cyan-500/10 transition duration-700"></div>
+                    <img src="{{ asset('image/6164736.png') }}" 
+                         alt="Collaboration" 
+                         class="relative max-w-full max-h-[85%] object-contain transform hover:scale-105 transition duration-700">
                 </div>
             </div>
 
-            <!-- Right Side: Register Form -->
-            <div class="p-8 lg:p-12 flex flex-col justify-center bg-white overflow-hidden">
+            <!-- Right Side: Smart Form -->
+            <div class="p-10 lg:p-14 flex flex-col justify-center bg-white overflow-y-auto custom-scroll">
                 <div class="max-w-sm mx-auto w-full">
-                    <!-- Title Section -->
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-[900] tracking-tight text-slate-900 mb-1">Join <span class="text-indigo-600">Masar.</span></h2>
-                        <p class="text-slate-400 text-[10px] font-[800] uppercase tracking-[0.2em]">Create your workspace today</p>
-                    </div>
+                    
+                    <header class="mb-10">
+                        <h2 class="text-3xl font-[900] tracking-tight text-slate-900 mb-2">Create account.</h2>
+                        <p class="text-slate-400 text-[11px] font-[800] uppercase tracking-[0.2em]">
+                            {{ request('project_id') ? 'Joining Project Workspace' : 'Start your journey with Masar' }}
+                        </p>
+                    </header>
 
-                    <form action="{{ route('register') }}" method="POST" class="space-y-3.5">
+                    <form action="{{ route('register') }}" method="POST" class="space-y-4">
                         @csrf
                         
+                        <!-- حقل مخفي لحفظ رقم المشروع إذا جاء من دعوة -->
+                        <input type="hidden" name="project_id" value="{{ request('project_id') }}">
+
                         <!-- Full Name -->
-                        <div class="space-y-1">
-                            <label class="block text-[9px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Full Name</label>
+                        <div class="space-y-1.5">
+                            <label class="block text-[10px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Full Name</label>
                             <input type="text" name="name" value="{{ old('name') }}" required placeholder="e.g. John Doe"
-                                   class="w-full px-5 py-3 rounded-xl bg-slate-50 text-xs font-semibold outline-none input-style">
-                            @error('name') <p class="text-red-500 text-[9px] mt-1 font-bold">{{ $message }}</p> @enderror
+                                   class="input-field">
+                            @error('name') <p class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Email -->
-                        <div class="space-y-1">
-                            <label class="block text-[9px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
-                            <input type="email" name="email" value="{{ old('email') }}" required placeholder="name@company.com"
-                                   class="w-full px-5 py-3 rounded-xl bg-slate-50 text-xs font-semibold outline-none input-style">
-                            @error('email') <p class="text-red-500 text-[9px] mt-1 font-bold">{{ $message }}</p> @enderror
+                        <!-- Email (هنا الذكاء: يسحب الإيميل تلقائياً من الرابط) -->
+                        <div class="space-y-1.5">
+                            <label class="block text-[10px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
+                            <input type="email" name="email" value="{{ request('email', old('email')) }}" required placeholder="name@company.com"
+                                   class="input-field">
+                            @error('email') <p class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Password Group -->
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="space-y-1">
-                                <label class="block text-[9px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Password</label>
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Password</label>
                                 <input type="password" name="password" required placeholder="••••••••"
-                                       class="w-full px-4 py-3 rounded-xl bg-slate-50 text-xs font-semibold outline-none input-style">
+                                       class="input-field">
                             </div>
-                            <div class="space-y-1">
-                                <label class="block text-[9px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Confirm</label>
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Confirm</label>
                                 <input type="password" name="password_confirmation" required placeholder="••••••••"
-                                       class="w-full px-4 py-3 rounded-xl bg-slate-50 text-xs font-semibold outline-none input-style">
+                                       class="input-field">
                             </div>
+                            @error('password') <p class="col-span-2 text-red-500 text-[10px] font-bold">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Terms -->
-                        <div class="flex items-center gap-2 px-1 py-1">
-                            <input type="checkbox" id="terms" required class="w-3.5 h-3.5 rounded border-slate-200 text-indigo-600 focus:ring-indigo-500 cursor-pointer">
-                            <label for="terms" class="text-[10px] font-bold text-slate-500 cursor-pointer">
-                                I agree to the <span class="text-indigo-600 hover:underline">Terms & Privacy</span>
+                        <div class="flex items-center gap-3 px-1 py-2">
+                            <input type="checkbox" id="terms" required class="w-4 h-4 rounded border-slate-200 text-cyan-600 focus:ring-cyan-500 cursor-pointer">
+                            <label for="terms" class="text-[11px] font-bold text-slate-500 cursor-pointer">
+                                I agree to the <span class="text-cyan-600 hover:underline">Terms & Privacy</span>
                             </label>
                         </div>
 
-                        <button type="submit" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-[900] text-xs uppercase tracking-[0.2em] hover:bg-indigo-600 shadow-lg shadow-slate-100 transition-all duration-300 active:scale-[0.98]">
+                        <button type="submit" class="w-full btn-primary !py-4 justify-center bg-slate-900 hover:bg-cyan-600 shadow-xl shadow-slate-100">
                             Create Account
                         </button>
                     </form>
 
                     <!-- Divider -->
-                    <div class="mt-6 relative">
+                    <div class="mt-8 relative text-center">
                         <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100"></div></div>
-                        <div class="relative flex justify-center text-[9px] font-black uppercase tracking-[0.2em]"><span class="bg-white px-4 text-slate-300">Quick Join</span></div>
+                        <span class="relative bg-white px-4 text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">Fast Access</span>
                     </div>
 
                     <!-- Google Signup -->
-                    <div class="mt-5">
-                        <button class="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-slate-100 bg-white text-[11px] font-bold text-slate-600 hover:bg-slate-50 transition-all">
-                            <img src="https://www.svgrepo.com/show/355037/google.svg" class="h-3.5 w-3.5" alt="Google">
-                             with Google
+                    <div class="mt-6">
+                        <button type="button" class="w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl border border-slate-100 bg-white text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all">
+                            <img src="https://www.svgrepo.com/show/355037/google.svg" class="h-4 w-4" alt="Google">
+                            Sign up with Google
                         </button>
                     </div>
                 </div>
@@ -135,6 +126,10 @@
 
         </div>
     </main>
+
+    <footer class="p-6 text-center">
+        <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-300">© 2025 Masar Engineering Lab. Built for Teams.</p>
+    </footer>
 
 </body>
 </html>

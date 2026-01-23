@@ -11,50 +11,26 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $workspace = $user->workspaces()->first();
+
+        if (!$workspace) return redirect()->route('setup.workspace');
+
+        $projectIds = $workspace->projects()->pluck('id');
         
-        // جلب مساحة العمل التي يملكها المستخدم الحالي
-        $workspace = Workspace::where('owner_id', $user->id)->first();
+        $totalProjects = $workspace->projects()->count();
+        $activeTasks = \App\Models\Task::whereIn('project_id', $projectIds)->where('status', '!=', 'done')->count();
+        $doneTasks = \App\Models\Task::whereIn('project_id', $projectIds)->where('status', 'done')->count();
+        $teamCount = \DB::table('project_user')->whereIn('project_id', $projectIds)->distinct()->count('user_id') ?: 1;
 
-        // إذا لم يملك مساحة عمل بعد (حالة نادرة بعد الـ Onboarding)
-        if (!$workspace) {
-            return redirect()->route('setup.workspace');
-        }
-
-        // تحضير الإحصائيات (الآن أصبحت ديناميكية)
         $stats = [
-            [
-                'label' => 'Total Projects', 
-                'value' => $workspace->projects()->count(), 
-                'change' => '+1', 
-                'icon' => 'folder'
-            ],
-            [
-                'label' => 'Active Tasks', 
-                'value' => '0', // سنبرمجها لاحقاً
-                'change' => '0%', 
-                'icon' => 'check-circle'
-            ],
-            [
-                'label' => 'Team Members', 
-                'value' => '1', // المستخدم نفسه حالياً
-                'change' => '0%', 
-                'icon' => 'users'
-            ],
-            [
-                'label' => 'Budget Used', 
-                'value' => '$0', 
-                'change' => '0%', 
-                'icon' => 'dollar-sign'
-            ],
+            ['label' => 'Total Projects', 'value' => $totalProjects, 'icon' => 'folder', 'color' => 'text-blue-500'],
+            ['label' => 'Active Tasks', 'value' => $activeTasks, 'icon' => 'clock', 'color' => 'text-amber-500'],
+            ['label' => 'Tasks Done', 'value' => $doneTasks, 'icon' => 'check-circle', 'color' => 'text-emerald-500'],
+            ['label' => 'Team Members', 'value' => $teamCount, 'icon' => 'users', 'color' => 'text-indigo-500'],
         ];
 
-        // جلب آخر 5 مشاريع تم إنشاؤها
-        $recent_projects = $workspace->projects()->latest()->take(5)->get();
+        $recent_projects = $workspace->projects()->oldest()->take(5)->get();
 
-        return view('dashboard', [
-            'stats' => $stats,
-            'recent_projects' => $recent_projects,
-            'workspace_name' => $workspace->name
-        ]);
+        return view('dashboard', compact('stats', 'recent_projects', 'workspace'));
     }
 }
