@@ -4,12 +4,11 @@
 <div class="max-w-7xl mx-auto px-6 py-10">
     
     <style>
-        /* استخدام خط Inter العالمي - مريح جداً للعين وطبيعي */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; color: #1e293b; }
     </style>
 
-    <!-- Page Header -->
+
     <header class="flex items-center justify-between mb-12 pb-6 border-b border-slate-100">
         <div>
             <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Projects</h1>

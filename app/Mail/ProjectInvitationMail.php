@@ -11,11 +11,9 @@ class ProjectInvitationMail extends Mailable
     use Queueable;
 
     public $project;
-    public $url; // هذا هو السطر الذي كان ناقصاً وتسبب بالخطأ
+    public $url;
 
-    /**
-     * نمرر المشروع والرابط من خلال الـ Constructor
-     */
+    
     public function __construct(Project $project, $url)
     {
         $this->project = $project;

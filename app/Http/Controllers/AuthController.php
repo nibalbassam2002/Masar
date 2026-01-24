@@ -10,26 +10,14 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * عرض صفحة الدخول بنمط Masar
-     */
+    
     public function showLogin() {
         return view('auth.login');
     }
-
-    /**
-     * عرض صفحة التسجيل
-     */
     public function showRegister() {
         return view('auth.register');
     }
-
-    /**
-     * معالجة عملية التسجيل بذكاء (دعم الدعوات)
-     */
     public function register(Request $request) {
-        dd($request->all());
-        // 1. التحقق من البيانات (مع إضافة حقل المشروع الاختياري)
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -37,17 +25,16 @@ class AuthController extends Controller
             'project_id' => 'nullable|exists:projects,id',
         ]);
 
-        // 2. إنشاء المستخدم الجديد
+        //  إنشاء المستخدم الجديد
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // 3. تسجيل الدخول تلقائياً
+        //  تسجيل الدخول تلقائياً
         Auth::login($user);
 
-        // 4. منطق الانضمام التلقائي (Smart Join Logic)
         if ($request->filled('project_id')) {
             $project = Project::find($request->project_id);
             if ($project) {
@@ -60,7 +47,6 @@ class AuthController extends Controller
             }
         }
 
-        // 5. إذا لم يأتِ من دعوة، يذهب لإعداد مساحة عمله الخاصة (Onboarding)
         return redirect()->route('setup.workspace');
     }
 

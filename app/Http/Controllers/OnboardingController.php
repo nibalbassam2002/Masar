@@ -6,64 +6,74 @@ use Illuminate\Http\Request;
 
 class OnboardingController extends Controller
 {
-    // 1. واجهة اسم مساحة العمل
+   
     public function workspace()
     {
         return view('setup.workspace');
     }
 
-    // 2. حفظ اسم مساحة العمل
+   
     public function storeWorkspace(Request $request)
     {
         $request->validate(['workspace_name' => 'required|string|max:255']);
-        
-        // سنقوم بحفظ البيانات في جلسة (Session) مؤقتاً حتى ننتهي من كل الخطوات
         session(['setup_workspace_name' => $request->workspace_name]);
 
         return redirect()->route('setup.team');
     }
 
-    // 3. واجهة تخصص الفريق
+    //  واجهة تخصص الفريق
     public function teamProfile()
     {
         return view('setup.team');
     }
-
-    // 4. حفظ تخصص الفريق (هذه هي الدالة التي كانت ناقصة وتسببت بالخطأ)
     public function storeTeamProfile(Request $request)
-    {
-        $request->validate(['team_type' => 'required']);
-        
-        session(['setup_team_type' => $request->team_type]);
+{
+    $workspace = auth()->user()->workspaces()->first();
+    
+    // تصنيفات مقترحة بناءً على الاختيار
+    $defaults = match($request->team_type) {
+        'development' => ['Frontend', 'Backend', 'QA / Testing'],
+        'marketing'   => ['Content', 'Ads', 'Design'],
+        default       => ['General', 'Admin'],
+    };
 
-        return redirect()->route('setup.project');
+    // حفظها في قاعدة البيانات فوراً
+    foreach($defaults as $name) {
+        $workspace->taskCategories()->create(['name' => $name]);
     }
 
-    // 5. واجهة إنشاء أول مشروع
+    return redirect()->route('setup.project');
+}
+
     public function project()
     {
         return view('setup.project');
     }
 
+    
     public function storeProject(Request $request)
     {
-        $request->validate(['project_name' => 'required|string|max:255']);
+        $user = auth()->user();
 
-        // 1. إنشاء مساحة العمل (Workspace) من بيانات الجلسة
+        // 1. إنشاء المساحة
         $workspace = \App\Models\Workspace::create([
             'name' => session('setup_workspace_name'),
-            'owner_id' => auth()->id(),
+            'owner_id' => $user->id,
         ]);
 
-        // 2. إنشاء أول مشروع (Project)
+        // 2. الربط في الجدول الوسيط (هذا هو السطر الذي كان ينقصنا)
+        $workspace->members()->attach($user->id, [
+            'role' => 'admin',
+            'job_title' => session('setup_team_type') ?? 'Owner'
+        ]);
+
+        // 3. إنشاء المشروع
         $workspace->projects()->create([
             'name' => $request->project_name,
-            'status' => 'active', // الحالة الافتراضية
+            'status' => 'active',
         ]);
 
-        // 3. تنظيف الجلسة
         session()->forget(['setup_workspace_name', 'setup_team_type']);
-
         return redirect()->route('dashboard');
     }
 }
