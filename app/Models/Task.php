@@ -34,4 +34,11 @@ class Task extends Model
         return $this->hasMany(Task::class, 'parent_id');
         
         }
+        public function notes() {
+    return $this->hasMany(TaskNote::class)->latest();
+}
+    public function attachments()
+    {
+        return $this->hasMany(TaskAttachment::class)->latest();
+    }
 }

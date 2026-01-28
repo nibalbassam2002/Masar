@@ -45,13 +45,18 @@ Route::middleware('auth')->group(function () {
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::post('/tasks/update-status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
+    Route::get('/tasks/{task}/quick-view', [TaskController::class, 'quickView'])->name('tasks.quick-view');
     Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
+    Route::post('/tasks/{task}/notes', [TaskController::class, 'storeNote'])->name('tasks.notes.store');
+    Route::get('/tasks/{task}/quick-view', [TaskController::class, 'quickView'])->name('tasks.quick-view');
+    Route::delete('/notes/{note}', [TaskController::class, 'destroyNote'])->name('notes.destroy');
     Route::get('/settings/groups', [WorkspaceController::class, 'settingsGroups'])->name('settings.groups');
     Route::post('/settings/groups', [WorkspaceController::class, 'storeGroup'])->name('settings.groups.store');
     Route::delete('/settings/groups/{category}', [WorkspaceController::class, 'destroyGroup'])->name('settings.groups.destroy');
     Route::get('/settings/members', [WorkspaceController::class, 'settingsMembers'])->name('settings.members');
-Route::post('/settings/members/invite', [WorkspaceController::class, 'inviteMember'])->name('settings.members.invite');
-Route::delete('/settings/members/{user}', [WorkspaceController::class, 'removeMember'])->name('settings.members.remove');
+    Route::post('/settings/members/invite', [WorkspaceController::class, 'inviteMember'])->name('settings.members.invite');
+    Route::delete('/settings/members/{user}', [WorkspaceController::class, 'removeMember'])->name('settings.members.remove');
+    Route::get('/projects/{project}/accept', [ProjectController::class, 'acceptInvitation'])->name('invitation.accept');
 });
 Route::middleware(['auth'])->prefix('setup')->group(function () {
     Route::get('/workspace', [OnboardingController::class, 'workspace'])->name('setup.workspace');

@@ -68,6 +68,7 @@
 
                     <form action="{{ route('login') }}" method="POST" class="space-y-4">
                         @csrf
+                        <input type="hidden" name="project_id" value="{{ request('project_id') }}">
                         <div>
                             <label class="block text-[9px] font-[800] uppercase tracking-[0.2em] text-slate-400 mb-1.5 ml-1">Email Address</label>
                             <input type="email" name="email" required placeholder="name@company.com"

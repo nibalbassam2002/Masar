@@ -1,137 +1,104 @@
 @extends('layouts.master')
 
+@section('breadcrumbs')
+    <span class="text-slate-900 font-bold uppercase tracking-[0.2em] text-[10px]">Portfolio Management</span>
+@endsection
+
 @section('content')
-<div class="max-w-7xl mx-auto px-6 py-10">
+<div class="max-w-[1500px] mx-auto px-8 py-8 space-y-16">
     
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; color: #1e293b; }
-    </style>
-
-
-    <header class="flex items-center justify-between mb-12 pb-6 border-b border-slate-100">
-        <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Projects</h1>
-            <p class="text-sm text-slate-500 mt-1">Manage your team's workspace and productivity.</p>
+    <!-- 1. Global Page Header -->
+    <header class="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-slate-100 pb-8">
+        <div class="flex items-center gap-8 flex-1 w-full">
+            <h1 class="heading-font text-3xl font-800 text-slate-900 tracking-tighter">Projects</h1>
+            
+            <!-- Quick Search Bar -->
+            <div class="relative w-full max-w-sm group hidden md:block">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within:text-cyan-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" placeholder="Jump to project..." 
+                       class="w-full bg-slate-50 border-none text-xs font-semibold py-2.5 pl-11 pr-4 rounded-xl focus:ring-4 focus:ring-cyan-500/5 focus:bg-white transition-all outline-none">
+            </div>
         </div>
-        
-        <button onclick="openModal()" 
-                class="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 shadow-md shadow-cyan-100 active:scale-95">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>
+
+        <button onclick="openModal()" class="btn-primary">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M12 4v16m8-8H4"/></svg>
             New Project
         </button>
     </header>
 
-    <!-- Projects Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        @forelse($projects as $project)
-        <a href="{{ route('projects.show', $project->id) }}" class="bg-white rounded-3xl border border-slate-200/60 p-8 hover:border-cyan-400 hover:shadow-xl transition-all duration-300 flex flex-col group relative">
-            
-            <div class="flex justify-between items-center mb-6">
-                <span class="text-xs font-medium text-slate-400">{{ $project->created_at->format('M d, Y') }}</span>
-                <span class="px-3 py-1 bg-cyan-50 text-cyan-600 rounded-full text-[11px] font-bold">
-                    {{ ucfirst($project->status) }}
-                </span>
-            </div>
+    <!-- 2. Section: Projects I Lead (السيان الموحد) -->
+    <section class="space-y-6">
+        <div class="flex items-center gap-4">
+            <h2 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Projects I Lead</h2>
+            <span class="px-2 py-0.5 bg-cyan-50 text-cyan-600 rounded text-[9px] font-bold border border-cyan-100">{{ $ledProjects->total() }}</span>
+        </div>
 
-            <div class="mb-10">
-                <h3 class="text-xl font-bold text-slate-900 group-hover:text-cyan-600 transition-colors mb-2">
-                    {{ $project->name }}
-                </h3>
-                <p class="text-[14px] text-slate-500 leading-relaxed line-clamp-3">
-                    {{ $project->description ?? 'No description provided for this project. Start by adding milestones and goals to help your team stay on track.' }}
-                </p>
-            </div>
-
-            <div class="mt-auto pt-6 border-t border-slate-50">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2">
-                         <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=06b6d4&color=fff" 
-                              class="w-8 h-8 rounded-full shadow-sm" title="Project Owner">
-                        <span class="text-xs font-medium text-slate-400 ">Solo workspace</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            @forelse($ledProjects as $project)
+                <a href="{{ route('projects.show', $project->id) }}" class="group bg-white p-7 rounded-[2rem] border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-cyan-400 hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-cyan-600 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <span class="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-lg text-[8px] font-black uppercase border border-cyan-100 tracking-tighter">Project Lead</span>
                     </div>
-                    <span class="text-xs font-bold text-slate-400">{{ $project->progress ?? 0 }}%</span>
+
+                    <h3 class="text-base font-bold text-slate-900 group-hover:text-cyan-600 transition-colors capitalize leading-tight">{{ $project->name }}</h3>
+                    <p class="text-[11px] text-slate-400 line-clamp-2 mt-2 leading-relaxed">
+                        {{ $project->description ?? 'Project workspace defined for team velocity.' }}
+                    </p>
+                    
+                    <div class="mt-8 pt-4 border-t border-slate-50 flex items-center justify-between">
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Progress</span>
+                        <span class="text-[10px] font-black text-cyan-600">{{ $project->progress }}%</span>
+                    </div>
+                </a>
+            @empty
+                <div class="col-span-full py-16 text-center border-2 border-dashed border-slate-100 rounded-[2.5rem] bg-slate-50/30">
+                    <p class="text-[11px] font-bold text-slate-300 uppercase tracking-widest leading-none">No personal projects founded yet</p>
                 </div>
+            @endforelse
+        </div>
+        <div class="pt-4">{{ $ledProjects->appends(['part_page' => $participatingProjects->currentPage()])->links() }}</div>
+    </section>
 
-                <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                    <div class="bg-cyan-500 h-full rounded-full transition-all duration-1000 shadow-sm" 
-                         style="width: {{ $project->progress ?? 0 }}%"></div>
+    <!-- 3. Section: Participating Projects (الآن باللون السيان الموحد) -->
+    <section class="space-y-6 pt-10 border-t border-slate-50">
+        <div class="flex items-center gap-4">
+            <h2 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Participating Projects</h2>
+            <span class="px-2 py-0.5 bg-cyan-50 text-cyan-600 rounded text-[9px] font-bold border border-cyan-100">{{ $participatingProjects->total() }}</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            @forelse($participatingProjects as $project)
+                <a href="{{ route('projects.show', $project->id) }}" class="group bg-white p-7 rounded-[2rem] border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-cyan-400 hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex justify-between items-start mb-6">
+                        <!-- صورة المالك بدلاً من الإيموجي -->
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($project->workspace->owner->name) }}&background=06b6d4&color=fff&bold=true" class="w-9 h-9 rounded-xl shadow-sm border-2 border-white">
+                        <span class="px-2.5 py-1 bg-slate-50 text-slate-500 rounded-lg text-[12px] font-black  border border-slate-100 tracking-tighter">partner</span>
+                    </div>
+
+                    <h3 class="text-base font-bold text-slate-900 group-hover:text-cyan-600 transition-colors capitalize leading-tight">{{ $project->name }}</h3>
+                    <!-- معلومات المالك بلمسة بشرية -->
+                    <div class="mt-2 flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <span class="opacity-50 ">Led by</span>
+                        <span class="text-cyan-600">{{ $project->workspace->owner->name }}</span>
+                    </div>
+                    
+                    <div class="mt-8 pt-4 border-t border-slate-50 flex items-center justify-between">
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Team Status</span>
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Active Member</span>
+                    </div>
+                </a>
+            @empty
+                <div class="col-span-full py-16 text-center border-2 border-dashed border-slate-100 rounded-[2.5rem] bg-slate-50/30">
+                    <p class="text-[11px] font-bold text-slate-300 uppercase tracking-widest leading-none">You haven't been invited to external projects yet</p>
                 </div>
-            </div>
-        </a>
-        @empty
-        <div class="col-span-full py-20 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-             <h3 class="text-lg font-semibold text-slate-900">Your project list is empty</h3>
-             <p class="text-sm text-slate-400 mt-1">Create your first project to get started.</p>
+            @endforelse
         </div>
-        @endforelse
-    </div>
+        <div class="pt-4">{{ $participatingProjects->appends(['led_page' => $ledProjects->currentPage()])->links() }}</div>
+    </section>
 
-    <!-- Modal: New Project -->
-<div id="newProjectModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
-    <!-- خلفية ضبابية خفيفة جداً -->
-    <div class="absolute inset-0 bg-slate-900/30 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
-    
-    <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md p-10 transform transition-all scale-95 opacity-0 duration-300 border border-slate-50" id="modalContainer">
-        
-        <!-- Header Section -->
-        <div class="text-center mb-10">
-            <!-- Icon -->
-            <div class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                    <path d="M12 4v16m8-8H4"/>
-                </svg>
-            </div>
-            
-            <!-- Title & Subtitle (التعديل هنا) -->
-            <h3 class="text-2xl font-bold text-slate-900 tracking-tight mb-2">New Project</h3>
-            <p class="text-[14px] text-slate-400 font-medium leading-relaxed max-w-[240px] mx-auto">
-                Define your goals and start building with your team today.
-            </p>
-        </div>
-        
-        <form action="{{ route('projects.store') }}" method="POST" class="space-y-6">
-            @csrf
-            
-            <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-slate-400 tracking-widest ml-1">Project Name</label>
-                <input type="text" name="name" required placeholder="e.g. Design System"
-                       class="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none text-sm font-semibold focus:ring-4 focus:ring-cyan-500/10 focus:bg-white outline-none transition-all placeholder:text-slate-300">
-            </div>
-
-            <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-slate-400 tracking-widest ml-1">Description</label>
-                <textarea name="description" rows="3" placeholder="What are the goals?"
-                          class="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none text-sm font-semibold focus:ring-4 focus:ring-cyan-500/10 focus:bg-white outline-none transition-all placeholder:text-slate-300"></textarea>
-            </div>
-            
-            <div class="flex items-center gap-4 pt-4">
-                <button type="button" onclick="closeModal()" 
-                        class="flex-1 py-4 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors">
-                    Cancel
-                </button>
-                <button type="submit" 
-                        class="flex-2 px-8 py-4 bg-cyan-500 text-white rounded-2xl text-sm font-bold shadow-lg shadow-cyan-100 hover:bg-cyan-600 transition-all active:scale-95">
-                    Create Project
-                </button>
-            </div>
-        </form>
-    </div>
+    @include('projects.partials.create-modal')
 </div>
-</div>
-
-<script>
-    function openModal() {
-        const modal = document.getElementById('newProjectModal');
-        const container = document.getElementById('modalContainer');
-        modal.classList.remove('hidden');
-        setTimeout(() => { container.classList.remove('scale-95', 'opacity-0'); }, 10);
-    }
-    function closeModal() {
-        const modal = document.getElementById('newProjectModal');
-        const container = document.getElementById('modalContainer');
-        container.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => { modal.classList.add('hidden'); }, 200);
-    }
-</script>
 @endsection

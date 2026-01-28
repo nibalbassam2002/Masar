@@ -8,29 +8,30 @@ use App\Models\Project;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
-        $user = auth()->user();
-        $workspace = $user->workspaces()->first();
+  public function index()
+{
+    $user = auth()->user();
+    
+    // جلب كل المشاريع التي يشارك فيها المستخدم (سواء قائد أو عضو)
+    $projects = \App\Models\Project::where(function($query) use ($user) {
+        $query->whereHas('users', function($q) use ($user) {
+            $q->where('user_id', $user->id);
+        })->orWhereHas('workspace', function($q) use ($user) {
+            $q->where('owner_id', $user->id);
+        });
+    })->get();
 
-        if (!$workspace) return redirect()->route('setup.workspace');
+    $projectIds = $projects->pluck('id');
+    
+    $stats = [
+        ['label' => 'Total Projects', 'value' => $projects->count(), 'icon' => 'folder', 'color' => 'text-blue-500'],
+        ['label' => 'Active Tasks', 'value' => \App\Models\Task::whereIn('project_id', $projectIds)->where('status', '!=', 'done')->count(), 'icon' => 'clock', 'color' => 'text-amber-500'],
+        ['label' => 'Tasks Done', 'value' => \App\Models\Task::whereIn('project_id', $projectIds)->where('status', 'done')->count(), 'icon' => 'check-circle', 'color' => 'text-emerald-500'],
+        ['label' => 'Team Members', 'value' => \DB::table('project_user')->whereIn('project_id', $projectIds)->distinct()->count('user_id') ?: 1, 'icon' => 'users', 'color' => 'text-indigo-500'],
+    ];
 
-        $projectIds = $workspace->projects()->pluck('id');
-        
-        $totalProjects = $workspace->projects()->count();
-        $activeTasks = \App\Models\Task::whereIn('project_id', $projectIds)->where('status', '!=', 'done')->count();
-        $doneTasks = \App\Models\Task::whereIn('project_id', $projectIds)->where('status', 'done')->count();
-        $teamCount = \DB::table('project_user')->whereIn('project_id', $projectIds)->distinct()->count('user_id') ?: 1;
+    $recent_projects = $projects->take(5);
 
-        $stats = [
-            ['label' => 'Total Projects', 'value' => $totalProjects, 'icon' => 'folder', 'color' => 'text-blue-500'],
-            ['label' => 'Active Tasks', 'value' => $activeTasks, 'icon' => 'clock', 'color' => 'text-amber-500'],
-            ['label' => 'Tasks Done', 'value' => $doneTasks, 'icon' => 'check-circle', 'color' => 'text-emerald-500'],
-            ['label' => 'Team Members', 'value' => $teamCount, 'icon' => 'users', 'color' => 'text-indigo-500'],
-        ];
-
-        $recent_projects = $workspace->projects()->oldest()->take(5)->get();
-
-        return view('dashboard', compact('stats', 'recent_projects', 'workspace'));
-    }
+    return view('dashboard', compact('stats', 'recent_projects'));
+}
 }

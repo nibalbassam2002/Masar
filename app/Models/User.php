@@ -53,4 +53,22 @@ class User extends Authenticatable
                     ->withPivot('role', 'job_title')
                     ->withTimestamps();
     }
+    public function currentWorkspace()
+{
+    return $this->workspaces()->first() 
+           ?? Workspace::where('owner_id', $this->id)->first();
+}
+
+
+    public function roleInWorkspace($workspaceId)
+    {
+        $pivot = $this->workspaces()->where('workspace_id', $workspaceId)->first();
+        
+        return $pivot ? $pivot->pivot->role : 'Member';
+    }
+        public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_user')
+                    ->withTimestamps();
+    }
 }

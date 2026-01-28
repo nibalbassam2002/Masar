@@ -88,18 +88,26 @@
         </div>
     </nav>
 
-    <!-- User Profile Section -->
-    <div class="p-4 m-4 rounded-[24px] bg-slate-50 border border-slate-100 shrink-0">
-        <div class="flex items-center gap-3">
-            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=06b6d4&color=fff&bold=true"
-                class="w-10 h-10 rounded-xl shadow-sm border border-white">
-            <div x-show="!isCompact" class="overflow-hidden text-left">
-                <p class="text-sm font-black text-slate-800 truncate leading-none mb-1.5">{{ auth()->user()->name }}
-                </p>
-                <p class="text-[9px] font-bold text-cyan-600 uppercase tracking-widest truncate">
-                    {{ auth()->user()->job_title ?? 'Workspace Member' }}
-                </p>
-            </div>
+    <!-- بروفايل المستخدم في السايدبار -->
+<div class="p-4 m-4 rounded-[24px] bg-slate-50 border border-slate-100 shrink-0">
+    <div class="flex items-center gap-3">
+        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=06b6d4&color=fff&bold=true" 
+             class="w-10 h-10 rounded-xl shadow-sm border border-white">
+        
+        <div x-show="!isCompact" class="overflow-hidden text-left">
+            <p class="text-sm font-black text-slate-800 truncate leading-none mb-1.5">{{ auth()->user()->name }}</p>
+            
+            <!-- الذكاء هنا: جلب الدور بناءً على مساحة العمل الحالية -->
+            <p class="text-[9px] font-bold text-cyan-600 uppercase tracking-widest truncate">
+                @php
+                    // نجلب مساحة العمل الحالية (أول واحدة للمستخدم حالياً)
+                    $currentWorkspace = auth()->user()->workspaces()->first();
+                @endphp
+                
+                {{-- إذا كانت هي المالكة للمساحة يظهر Admin، وإلا يظهر دورها الحقيقي --}}
+                {{ $currentWorkspace ? auth()->user()->roleInWorkspace($currentWorkspace->id) : 'Guest' }}
+            </p>
         </div>
     </div>
+</div>
 </div>

@@ -13,7 +13,6 @@ class ProjectInvitationMail extends Mailable
     public $project;
     public $url;
 
-    
     public function __construct(Project $project, $url)
     {
         $this->project = $project;

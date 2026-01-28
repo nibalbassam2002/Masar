@@ -1,15 +1,17 @@
 @extends('layouts.master')
 
 @section('breadcrumbs')
-    <a href="{{ route('tasks.index') }}">Tasks</a>
+    <a href="{{ route('projects.index') }}" class="hover:text-cyan-600">Projects</a>
     <span class="mx-1 opacity-30">/</span>
-    @if ($project)
-        <a href="{{ route('projects.show', $project->id) }}">{{ $project->name }}</a>
+    
+    @if(isset($project) && $project)
+        <a href="{{ route('projects.show', $project->id) }}" class="hover:text-cyan-600">{{ $project->name }}</a>
     @else
-        <span class="text-slate-400">New Assignment</span>
+        <span class="text-slate-400 italic font-normal">Global Task</span>
     @endif
+    
     <span class="mx-1 opacity-30">/</span>
-    <span class="text-slate-900 font-semibold">Assign</span>
+    <span class="text-slate-900 font-semibold uppercase tracking-tighter">New Task</span>
 @endsection
 
 @section('content')

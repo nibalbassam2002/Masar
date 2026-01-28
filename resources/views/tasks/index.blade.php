@@ -79,7 +79,7 @@
                             <!-- Project Link -->
                             <td class="py-6 px-8">
                                 <div class="flex flex-col">
-                                    <span class="text-xs font-bold text-slate-600">{{ $task->project->name }}</span>
+                                    <span class="text-xs font-bold text-slate-600">{{ $task->project->name ?? 'Deleted Project' }}</span>
                                     <span class="text-[9px] text-slate-400 uppercase tracking-widest mt-1">Production</span>
                                 </div>
                             </td>
