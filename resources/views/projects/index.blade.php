@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="max-w-[1500px] mx-auto px-8 py-8 space-y-16">
+<div class="max-w-[1500px] mx-auto px-8 py-8 space-y-12">
     
     <!-- 1. Global Page Header -->
     <header class="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-slate-100 pb-8">
@@ -26,43 +26,76 @@
         </button>
     </header>
 
-    <!-- 2. Section: Projects I Lead (السيان الموحد) -->
+    <!-- 2. Filter Tabs (إضافة جديدة للتنقل بين النشط والمؤرشف) -->
+    <div class="flex gap-2 bg-slate-100/50 p-1.5 rounded-2xl w-fit border border-slate-100">
+        <a href="{{ route('projects.index', ['filter' => 'active']) }}" 
+           class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ $filter != 'archived' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-400 hover:text-slate-600' }}">
+            Active Projects
+        </a>
+        <a href="{{ route('projects.index', ['filter' => 'archived']) }}" 
+           class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ $filter == 'archived' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-400 hover:text-slate-600' }}">
+            Archived
+        </a>
+    </div>
+
+    <!-- 3. Section: Projects I Lead -->
     <section class="space-y-6">
         <div class="flex items-center gap-4">
-            <h2 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Projects I Lead</h2>
+            <h2 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                {{ $filter == 'archived' ? 'Archived Projects' : 'Projects I Lead' }}
+            </h2>
             <span class="px-2 py-0.5 bg-cyan-50 text-cyan-600 rounded text-[9px] font-bold border border-cyan-100">{{ $ledProjects->total() }}</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             @forelse($ledProjects as $project)
-                <a href="{{ route('projects.show', $project->id) }}" class="group bg-white p-7 rounded-[2rem] border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-cyan-400 hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-cyan-600 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <div class="relative group">
+                    <!-- كرت المشروع -->
+                    <a href="{{ route('projects.show', $project->id) }}" class="block bg-white p-7 rounded-[2rem] border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-cyan-400 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-cyan-600 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </div>
+                            <span class="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-lg text-[8px] font-black uppercase border border-cyan-100 tracking-tighter">Project Lead</span>
                         </div>
-                        <span class="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-lg text-[8px] font-black uppercase border border-cyan-100 tracking-tighter">Project Lead</span>
-                    </div>
 
-                    <h3 class="text-base font-bold text-slate-900 group-hover:text-cyan-600 transition-colors capitalize leading-tight">{{ $project->name }}</h3>
-                    <p class="text-[11px] text-slate-400 line-clamp-2 mt-2 leading-relaxed">
-                        {{ $project->description ?? 'Project workspace defined for team velocity.' }}
-                    </p>
-                    
-                    <div class="mt-8 pt-4 border-t border-slate-50 flex items-center justify-between">
-                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Progress</span>
-                        <span class="text-[10px] font-black text-cyan-600">{{ $project->progress }}%</span>
-                    </div>
-                </a>
+                        <h3 class="text-base font-bold text-slate-900 group-hover:text-cyan-600 transition-colors capitalize leading-tight">{{ $project->name }}</h3>
+                        <p class="text-[11px] text-slate-400 line-clamp-2 mt-2 leading-relaxed">
+                            {{ $project->description ?? 'Project workspace defined for team velocity.' }}
+                        </p>
+                        
+                        <div class="mt-auto pt-8 flex items-center justify-between border-t border-slate-50">
+                            <div>
+                                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Progress</span>
+                                <span class="text-[10px] font-black text-cyan-600">{{ $project->progress }}%</span>
+                            </div>
+
+                            <!-- زر الأرشفة (إضافة جديدة) -->
+                            <form action="{{ route($project->status == 'archived' ? 'projects.unarchive' : 'projects.archive', $project->id) }}" method="POST" onclick="event.stopPropagation();">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" title="{{ $project->status == 'archived' ? 'Restore Project' : 'Archive Project' }}" class="p-2 rounded-lg hover:bg-slate-50 transition-colors group/btn">
+                                    @if($project->status == 'archived')
+                                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                    @else
+                                        <svg class="w-4 h-4 text-slate-300 group-hover/btn:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                                    @endif
+                                </button>
+                            </form>
+                        </div>
+                    </a>
+                </div>
             @empty
                 <div class="col-span-full py-16 text-center border-2 border-dashed border-slate-100 rounded-[2.5rem] bg-slate-50/30">
-                    <p class="text-[11px] font-bold text-slate-300 uppercase tracking-widest leading-none">No personal projects founded yet</p>
+                    <p class="text-[11px] font-bold text-slate-300 uppercase tracking-widest leading-none">No projects found in this section</p>
                 </div>
             @endforelse
         </div>
-        <div class="pt-4">{{ $ledProjects->appends(['part_page' => $participatingProjects->currentPage()])->links() }}</div>
+        <div class="pt-4">{{ $ledProjects->appends(['part_page' => $participatingProjects->currentPage(), 'filter' => $filter])->links() }}</div>
     </section>
 
-    <!-- 3. Section: Participating Projects (الآن باللون السيان الموحد) -->
+    <!-- 4. Section: Participating Projects -->
+    @if($participatingProjects->total() > 0 || $filter != 'archived')
     <section class="space-y-6 pt-10 border-t border-slate-50">
         <div class="flex items-center gap-4">
             <h2 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Participating Projects</h2>
@@ -73,13 +106,11 @@
             @forelse($participatingProjects as $project)
                 <a href="{{ route('projects.show', $project->id) }}" class="group bg-white p-7 rounded-[2rem] border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-cyan-400 hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex justify-between items-start mb-6">
-                        <!-- صورة المالك بدلاً من الإيموجي -->
                         <img src="https://ui-avatars.com/api/?name={{ urlencode($project->workspace->owner->name) }}&background=06b6d4&color=fff&bold=true" class="w-9 h-9 rounded-xl shadow-sm border-2 border-white">
                         <span class="px-2.5 py-1 bg-slate-50 text-slate-500 rounded-lg text-[12px] font-black  border border-slate-100 tracking-tighter">partner</span>
                     </div>
 
                     <h3 class="text-base font-bold text-slate-900 group-hover:text-cyan-600 transition-colors capitalize leading-tight">{{ $project->name }}</h3>
-                    <!-- معلومات المالك بلمسة بشرية -->
                     <div class="mt-2 flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                         <span class="opacity-50 ">Led by</span>
                         <span class="text-cyan-600">{{ $project->workspace->owner->name }}</span>
@@ -92,12 +123,13 @@
                 </a>
             @empty
                 <div class="col-span-full py-16 text-center border-2 border-dashed border-slate-100 rounded-[2.5rem] bg-slate-50/30">
-                    <p class="text-[11px] font-bold text-slate-300 uppercase tracking-widest leading-none">You haven't been invited to external projects yet</p>
+                    <p class="text-[11px] font-bold text-slate-300 uppercase tracking-widest leading-none">No external projects found</p>
                 </div>
             @endforelse
         </div>
-        <div class="pt-4">{{ $participatingProjects->appends(['led_page' => $ledProjects->currentPage()])->links() }}</div>
+        <div class="pt-4">{{ $participatingProjects->appends(['led_page' => $ledProjects->currentPage(), 'filter' => $filter])->links() }}</div>
     </section>
+    @endif
 
     @include('projects.partials.create-modal')
 </div>

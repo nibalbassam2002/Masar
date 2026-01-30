@@ -3,13 +3,13 @@
 @section('breadcrumbs')
     <a href="{{ route('projects.index') }}" class="hover:text-cyan-600">Projects</a>
     <span class="mx-1 opacity-30">/</span>
-    
-    @if(isset($project) && $project)
+
+    @if (isset($project) && $project)
         <a href="{{ route('projects.show', $project->id) }}" class="hover:text-cyan-600">{{ $project->name }}</a>
     @else
         <span class="text-slate-400 italic font-normal">Global Task</span>
     @endif
-    
+
     <span class="mx-1 opacity-30">/</span>
     <span class="text-slate-900 font-semibold uppercase tracking-tighter">New Task</span>
 @endsection
@@ -98,60 +98,75 @@
                     <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
 
                         @if (!$project)
-                            <div class="pb-6 border-b border-slate-50">
-                                <label
-                                    class="block text-[10px] font-bold text-cyan-600 uppercase tracking-widest mb-2 ml-1">Target
-                                    Project</label>
-                                <select name="project_id" required
-                                    class="w-full bg-slate-100/50 border-none rounded-xl p-3 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-cyan-500/10">
-                                    <option value="" disabled selected>Select a project...</option>
-                                    @foreach ($projects as $proj)
-                                        <option value="{{ $proj->id }}">{{ $proj->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            @if (!$project)
+                                <div class="pb-6 border-b border-slate-50">
+                                    <label
+                                        class="block text-[10px] font-bold text-cyan-600 uppercase tracking-widest mb-2 ml-1">Target
+                                        Project</label>
+                                    <select name="project_id" required
+                                        class="w-full bg-slate-100/50 border-none rounded-xl p-3 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-cyan-500/10">
+                                        <option value="" disabled selected>Select one of your projects...</option>
+                                        @foreach ($projects as $proj)
+                                            <!-- هنا ستظهر مشاريعك التي أنشئتِها أنتِ فقط -->
+                                            <option value="{{ $proj->id }}">{{ $proj->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @else
+                                <input type="hidden" name="project_id" value="{{ $project->id }}">
+                            @endif
                         @else
                             <input type="hidden" name="project_id" value="{{ $project->id }}">
                         @endif
 
                         <div>
                             <label
-                                class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block ml-1">Assignee</label>
-                            <select name="assignee_id"
-                                class="w-full bg-slate-50 border-none rounded-xl p-3 text-xs font-bold text-slate-700 outline-none">
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block ml-1">Assign
+                                Mission To (Select Team)</label>
+                            <!-- أضفنا [] للاسم وكلمة multiple -->
+                            <select name="assignee_ids[]" multiple required
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-700 outline-none focus:ring-4 focus:ring-cyan-500/5 min-h-[120px]">
+                                @foreach ($users as $u)
+                                    <option value="{{ $u->id }}">
+                                        {{ $u->name }} {{ $u->id === auth()->id() ? '(Me)' : '' }}
+                                    </option>
                                 @endforeach
                             </select>
+                            <p class="text-[9px] text-slate-400 mt-2 ml-1 italic">* Hold Ctrl (or Cmd) to select multiple
+                                members</p>
                         </div>
 
                         <div>
-                            <label class="label-premium">Work Group</label>
-                            <div class="grid grid-cols-1 gap-2">
+                            <label
+                                class="label-premium block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+                                My Work Groups
+                            </label>
 
-                                <div class="space-y-2">
-                                    <!-- استخدام المتغير الذي أرسلناه من الكنترولر -->
-                                    @forelse($taskCategories as $category)
-                                        <label
-                                            class="relative flex items-center px-4 py-3 bg-slate-50 rounded-2xl cursor-pointer border border-transparent hover:border-cyan-200 transition-all group">
-                                            <input type="radio" name="category" value="{{ $category->name }}"
-                                                class="sr-only peer" {{ $loop->first ? 'checked' : '' }}>
-                                            <div
-                                                class="w-4 h-4 rounded-full border-2 border-slate-300 peer-checked:border-cyan-500 peer-checked:bg-cyan-500 transition-all">
-                                            </div>
-                                            <span
-                                                class="ml-3 text-xs font-bold text-slate-500 peer-checked:text-slate-900 group-hover:text-slate-700 transition-colors">{{ $category->name }}</span>
-                                        </label>
-                                    @empty
+                            <div class="space-y-2 mt-3">
+                                @forelse($taskCategories as $category)
+                                    <label
+                                        class="relative flex items-center px-4 py-3 bg-slate-50 rounded-2xl cursor-pointer border border-transparent hover:border-cyan-200 transition-all group">
+                                        <input type="radio" name="category" value="{{ $category->name }}"
+                                            class="sr-only peer" {{ $loop->first ? 'checked' : '' }}>
+                                        <div
+                                            class="w-4 h-4 rounded-full border-2 border-slate-300 peer-checked:border-cyan-500 peer-checked:bg-cyan-500 transition-all">
+                                        </div>
+                                        <span class="ml-3 text-xs font-bold text-slate-500 peer-checked:text-slate-900">
+                                            {{ $category->name }}
+                                        </span>
+                                    </label>
+                                @empty
+                                    <div
+                                        class="text-center py-4 border-2 border-dashed border-slate-100 rounded-2xl opacity-50">
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase">No groups created yet</p>
+                                    </div>
+                                @endforelse
 
-                                        <p class="text-[10px] text-slate-400 italic px-4">No work groups defined yet.</p>
-                                    @endforelse
-
-                                    <a href="{{ route('settings.groups') }}"
-                                        class="text-[10px] font-bold text-cyan-600 uppercase tracking-widest mt-4 ml-2 hover:text-cyan-700 block text-center border border-dashed border-cyan-100 p-3 rounded-xl hover:bg-cyan-50 transition-all">
-                                        + Manage Work Groups
-                                    </a>
-                                </div>
+                                <!-- الحل هنا: الزر خارج الـ loop لكي يظهر دائماً -->
+                                <a href="{{ route('settings.groups') }}"
+                                    class="text-[10px] font-bold text-cyan-600 uppercase tracking-widest mt-4 block text-center border border-dashed border-cyan-100 p-3 rounded-xl hover:bg-cyan-50 transition-all">
+                                    + Manage Work Groups
+                                </a>
                             </div>
                         </div>
 
@@ -188,4 +203,18 @@
             </div>
         </form>
     </div>
+    <script>
+        // كود ذكي: عند تغيير الشخص المختار، قم بتغيير القسم تلقائياً
+        document.querySelector('select[name="assignee_id"]').addEventListener('change', function() {
+            // جلب التخصص الخاص بالمستخدم المختار (سنحتاج لإضافته كـ data attribute)
+            const selectedOption = this.options[this.selectedIndex];
+            const userDept = selectedOption.getAttribute('data-dept');
+
+            if (userDept) {
+                // البحث عن الراديو بوتن الذي يحمل نفس اسم القسم وتفعيله
+                const deptRadio = document.querySelector(`input[name="category"][value="${userDept}"]`);
+                if (deptRadio) deptRadio.checked = true;
+            }
+        });
+    </script>
 @endsection

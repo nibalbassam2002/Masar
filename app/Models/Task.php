@@ -24,16 +24,14 @@ class Task extends Model
         return $this->belongsTo(Project::class); 
 
         }
-    public function assignee() { 
-
-        return $this->belongsTo(User::class, 'assignee_id'); 
-
-        }
-    public function subtasks() { 
-
-        return $this->hasMany(Task::class, 'parent_id');
-        
-        }
+ public function assignees()
+{
+    return $this->belongsToMany(User::class, 'task_user');
+}
+public function subtasks()
+{
+    return $this->hasMany(Task::class, 'parent_id');
+}
         public function notes() {
     return $this->hasMany(TaskNote::class)->latest();
 }
@@ -41,4 +39,12 @@ class Task extends Model
     {
         return $this->hasMany(TaskAttachment::class)->latest();
     }
+    public function parent()
+    {
+        return $this->belongsTo(Task::class, 'parent_id');
+    }
+    public function creator()
+{
+    return $this->belongsTo(User::class, 'creator_id');
+}
 }

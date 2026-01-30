@@ -80,34 +80,39 @@
                 </a>
 
                 <a href="{{ route('settings.members') }}"
-                    class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all {{ request()->routeIs('settings.members') ? 'bg-cyan-50 text-cyan-600 font-bold' : 'text-slate-500 hover:bg-slate-50' }}">
-                    <i data-lucide="users" class="w-5 h-5"></i>
-                    <span x-show="!isCompact" class="text-sm font-semibold">Team Members</span>
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('settings.members') ? 'bg-cyan-50 text-cyan-600' : 'text-slate-500 hover:bg-slate-50' }}">
+                    <!-- أيقونة الفريق -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span class="text-sm font-semibold">Team Members</span>
                 </a>
             </div>
         </div>
     </nav>
 
     <!-- بروفايل المستخدم في السايدبار -->
-<div class="p-4 m-4 rounded-[24px] bg-slate-50 border border-slate-100 shrink-0">
-    <div class="flex items-center gap-3">
-        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=06b6d4&color=fff&bold=true" 
-             class="w-10 h-10 rounded-xl shadow-sm border border-white">
-        
-        <div x-show="!isCompact" class="overflow-hidden text-left">
-            <p class="text-sm font-black text-slate-800 truncate leading-none mb-1.5">{{ auth()->user()->name }}</p>
-            
-            <!-- الذكاء هنا: جلب الدور بناءً على مساحة العمل الحالية -->
-            <p class="text-[9px] font-bold text-cyan-600 uppercase tracking-widest truncate">
-                @php
-                    // نجلب مساحة العمل الحالية (أول واحدة للمستخدم حالياً)
-                    $currentWorkspace = auth()->user()->workspaces()->first();
-                @endphp
-                
-                {{-- إذا كانت هي المالكة للمساحة يظهر Admin، وإلا يظهر دورها الحقيقي --}}
-                {{ $currentWorkspace ? auth()->user()->roleInWorkspace($currentWorkspace->id) : 'Guest' }}
-            </p>
+    <div class="p-4 m-4 rounded-[24px] bg-slate-50 border border-slate-100 shrink-0">
+        <div class="flex items-center gap-3">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=06b6d4&color=fff&bold=true"
+                class="w-10 h-10 rounded-xl shadow-sm border border-white">
+
+            <div x-show="!isCompact" class="overflow-hidden text-left">
+                <p class="text-sm font-black text-slate-800 truncate leading-none mb-1.5">{{ auth()->user()->name }}
+                </p>
+
+                <!-- الذكاء هنا: جلب الدور بناءً على مساحة العمل الحالية -->
+                <p class="text-[9px] font-bold text-cyan-600 uppercase tracking-widest truncate">
+                    @php
+                        // نجلب مساحة العمل الحالية (أول واحدة للمستخدم حالياً)
+                        $currentWorkspace = auth()->user()->workspaces()->first();
+                    @endphp
+
+                    {{-- إذا كانت هي المالكة للمساحة يظهر Admin، وإلا يظهر دورها الحقيقي --}}
+                    {{ $currentWorkspace ? auth()->user()->roleInWorkspace($currentWorkspace->id) : 'Guest' }}
+                </p>
+            </div>
         </div>
     </div>
-</div>
 </div>

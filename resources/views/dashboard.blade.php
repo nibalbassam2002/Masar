@@ -1,129 +1,170 @@
 @extends('layouts.master')
 
-@section('breadcrumbs')
-    <span class="text-slate-500 font-medium">Overview</span>
-@endsection
-
 @section('content')
-    <div class="max-w-[1200px] mx-auto px-8 py-8 space-y-10">
-
-        <!-- 1. Simple Header -->
-        <header class="flex justify-between items-center">
+<div class="h-screen bg-[#fcfcfd] overflow-y-auto custom-scroll">
+    <div class="max-w-[1600px] mx-auto px-10 py-10">
+        
+        <!-- 1. هيدر ترحيبي ذكي -->
+        <header class="flex justify-between items-center mb-12">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900 tracking-tight">System Overview</h1>
-                <p class="text-xs text-slate-400 font-medium uppercase tracking-widest mt-1">
-                    Workspace: {{ $workspace->name ?? 'Default Workspace' }}
+                <h1 class="heading-font text-4xl font-800 text-slate-900 tracking-tight">
+                    Mission <span class="text-cyan-500">Control</span>
+                </h1>
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.3em] mt-2">
+                    {{ $isOwner ? 'Executive Insights' : 'My Performance Hub' }} / {{ $workspace->name }}
                 </p>
             </div>
-            <a href="{{ route('projects.index') }}" class="btn-primary">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
-                    <path d="M12 4v16m8-8H4" />
-                </svg>
-                New Project
-            </a>
-        </header>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            @foreach ($stats as $stat)
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center {{ $stat['color'] }}">
-                            <i data-lucide="{{ $stat['icon'] }}" class="w-4 h-4"></i>
-                        </div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ $stat['label'] }}</p>
-                    </div>
-                    <h3 class="text-2xl font-bold text-slate-800 leading-none">{{ $stat['value'] }}</h3>
+            <div class="flex gap-4">
+                <div class="bg-white px-6 py-3 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full {{ $isOwner ? 'bg-cyan-500 animate-pulse' : 'bg-emerald-500' }}"></div>
+                    <span class="text-[10px] font-black uppercase text-slate-500 tracking-widest">
+                        {{ $isOwner ? 'Workspace Owner' : 'Team Contributor' }}
+                    </span>
                 </div>
-            @endforeach
+            </div>
+        </header>
+
+        <!-- 2. كروت KPI الكبرى -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+                <span class="text-[9px] font-black uppercase text-cyan-400 tracking-[0.2em]">Projects Managed</span>
+                <h3 class="text-6xl font-800 mt-4 tracking-tighter">{{ $managedProjects->count() }}</h3>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm">
+                <span class="text-[9px] font-black text-slate-400 tracking-[0.2em]">Active Missions</span>
+                <h3 class="text-6xl font-800 text-slate-900 mt-4 tracking-tighter">{{ $activeCount }}</h3>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm">
+                <span class="text-[9px] font-black text-emerald-500 tracking-[0.2em]">Tasks Completed</span>
+                <h3 class="text-6xl font-800 text-slate-900 mt-4 tracking-tighter">{{ $doneCount }}</h3>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm">
+                <span class="text-[9px] font-black text-rose-500 tracking-[0.2em]">Critical Risk</span>
+                <h3 class="text-6xl font-800 text-rose-600 mt-4 tracking-tighter">{{ $criticalMissions->count() }}</h3>
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-                <div class="p-6 border-b border-slate-50 flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-widest">Recent Activity</h3>
-                    <a href="{{ route('projects.index') }}"
-                        class="text-[10px] font-bold text-cyan-600 uppercase hover:underline">View All Projects</a>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                            <tr>
-                                <th class="py-3 px-6">Project</th>
-                                <th class="py-3 px-6">Status</th>
-                                <th class="py-3 px-6 text-right">Activity</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-50">
-                            @forelse($recent_projects as $project)
-                                <tr class="hover:bg-slate-50/50 cursor-pointer transition-all"
-                                    onclick="window.location.href='{{ route('projects.show', $project->id) }}'">
-                                    <td class="py-4 px-6">
-                                        <p class="text-sm font-semibold text-slate-700 leading-none">{{ $project->name }}
-                                        </p>
-                                        <p class="text-[10px] text-slate-400 mt-1">
-                                            {{ $project->created_at->diffForHumans() }}</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span
-                                            class="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-md text-[9px] font-bold uppercase tracking-tighter">
-                                            {{ $project->status }}
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6 text-right">
-                                        <div class="flex items-center justify-end gap-2">
-                                            <div class="w-16 h-1 bg-slate-100 rounded-full overflow-hidden">
-                                                <div class="bg-cyan-500 h-full" style="width: {{ $project->progress }}%">
-                                                </div>
-                                            </div>
-                                            <span
-                                                class="text-[10px] font-bold text-slate-500">{{ $project->progress }}%</span>
+        <div class="grid grid-cols-12 gap-10">
+            
+            <!-- الجانب الأيسر: قوائم المشاريع (8 Columns) -->
+            <div class="col-span-12 lg:col-span-8 space-y-10">
+                
+                <!-- 1. مشاريع تحت إدارتي -->
+                <div class="bg-white rounded-[3rem] border border-slate-100 shadow-sm overflow-hidden">
+                    <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/20">
+                        <h3 class="text-sm font-black uppercase tracking-widest text-slate-900 italic">Projects I Lead</h3>
+                        <span class="px-3 py-1 bg-cyan-500 text-white text-[8px] font-black rounded-full">{{ $managedProjects->count() }} ACTIVE</span>
+                    </div>
+                    <div class="divide-y divide-slate-50">
+                        @forelse($managedProjects as $proj)
+                            @php
+                                $total = $proj->tasks()->whereNull('parent_id')->count();
+                                $done = $proj->tasks()->whereNull('parent_id')->where('status', 'done')->count();
+                                $percent = $total > 0 ? round(($done/$total)*100) : 0;
+                            @endphp
+                            <div class="p-8 hover:bg-slate-50/50 transition-all flex items-center justify-between group">
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-800 text-slate-800 group-hover:text-cyan-600 transition-colors">{{ $proj->name }}</h4>
+                                    <div class="flex items-center gap-6 mt-4">
+                                        <div class="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                            <div class="bg-cyan-500 h-full rounded-full transition-all duration-700" style="width: {{ $percent }}%"></div>
                                         </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="py-12 text-center text-slate-400 text-xs italic font-medium">
-                                        No projects found.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="lg:col-span-4 space-y-6">
-                <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl relative overflow-hidden group">
-                    <div class="relative z-10 space-y-6">
-                        <div>
-                            <p class="text-[10px] font-black text-cyan-400 uppercase tracking-[0.2em] mb-4">Quick Start</p>
-                            <h4 class="text-lg font-bold leading-tight">Ready to expand your Masar?</h4>
-                        </div>
-
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="w-5 h-5 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-[10px] font-bold">
-                                    1</div>
-                                <p class="text-xs text-slate-300 font-medium">Add your core team members.</p>
+                                        <span class="text-xs font-black text-slate-900">{{ $percent }}%</span>
+                                    </div>
+                                </div>
+                                <a href="{{ route('projects.show', $proj->id) }}" class="ml-10 w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-900 hover:text-white transition-all shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                </a>
                             </div>
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center text-slate-500 text-[10px] font-bold">
-                                    2</div>
-                                <p class="text-xs text-slate-400 font-medium">Break down projects into tasks.</p>
-                            </div>
-                        </div>
-
-                        <a href="{{ route('projects.index') }}"
-                            class="block text-center py-3 bg-white text-slate-900 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-cyan-500 hover:text-white transition-all">
-                            Invite Team
-                        </a>
-                    </div>
-                    <div
-                        class="absolute -right-6 -bottom-6 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl transition-all group-hover:bg-cyan-500/20">
+                        @empty
+                            <p class="p-10 text-center text-xs text-slate-300 italic uppercase">No projects led by you.</p>
+                        @endforelse
                     </div>
                 </div>
+
+                <!-- 2. مشاريع مشارك فيها -->
+                @if($participatingProjects->count() > 0)
+                <div class="bg-white rounded-[3rem] border border-slate-100 shadow-sm overflow-hidden">
+                    <div class="p-8 border-b border-slate-50">
+                        <h3 class="text-sm font-black uppercase tracking-widest text-slate-400 italic">Participating In</h3>
+                    </div>
+                    <div class="divide-y divide-slate-50">
+                        @foreach($participatingProjects as $proj)
+                            <div class="p-8 hover:bg-slate-50 transition-all flex items-center justify-between">
+                                <h4 class="text-lg font-800 text-slate-500">{{ $proj->name }}</h4>
+                                <a href="{{ route('projects.show', $proj->id) }}" class="text-[10px] font-black text-slate-400 hover:text-cyan-600 uppercase hover:underline">Open Project →</a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
             </div>
 
+            <!-- الجانب الأيمن: تحليل الفريق والمخاطر (4 Columns) -->
+            <div class="col-span-12 lg:col-span-4 space-y-10">
+                
+                <!-- Workforce Load (للقائد فقط) -->
+                @if($isOwner)
+                <div class="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm">
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-900 mb-8">Workforce Load</h3>
+                    <div class="space-y-6">
+                        @foreach($teamWorkload->sortByDesc('active_tasks_count') as $member)
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($member->name) }}&background={{ $member->id == auth()->id() ? '0f172a' : 'f1f5f9' }}&color={{ $member->id == auth()->id() ? 'fff' : '64748b' }}&bold=true" 
+                                         class="w-10 h-10 rounded-2xl shadow-sm border-2 border-white ring-4 ring-slate-50/50">
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-800 leading-none">
+                                            {{ $member->id == auth()->id() ? 'Me' : explode(' ', $member->name)[0] }}
+                                        </p>
+                                        <p class="text-[8px] font-black text-slate-300 uppercase mt-2 tracking-widest">
+                                            {{ $member->pivot->job_title ?? ($member->id == $workspace->owner_id ? 'Founder' : 'Team Member') }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bg-cyan-50 px-3 py-1.5 rounded-xl border border-cyan-100 flex items-center gap-2">
+                                    <span class="text-sm font-black text-cyan-600">{{ $member->active_tasks_count }}</span>
+                                    <span class="text-[8px] font-bold text-cyan-400 uppercase">Tasks</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                <!-- المواعيد الحرجة -->
+                <div class="bg-rose-50 p-8 rounded-[3rem] border border-rose-100 relative overflow-hidden">
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-rose-600 mb-6 flex items-center">
+                        <span class="w-2 h-2 bg-rose-500 rounded-full mr-2 animate-ping"></span>
+                        Critical Deadlines
+                    </h3>
+                    <div class="space-y-4">
+                        @forelse($criticalMissions as $m)
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-rose-100 hover:scale-[1.02] transition-all">
+                                <span class="text-[8px] font-black text-rose-400 uppercase">{{ $m->project->name }}</span>
+                                <h4 class="text-xs font-bold text-slate-800 mt-1 leading-tight">{{ $m->title }}</h4>
+                                <div class="mt-4 flex justify-between items-center">
+                                    <span class="text-[9px] font-bold text-rose-500 uppercase italic">Due: {{ \Carbon\Carbon::parse($m->due_date)->format('d M') }}</span>
+                                    <a href="{{ route('tasks.show', $m->id) }}" class="text-[8px] font-black text-cyan-600 uppercase hover:underline">Resolve →</a>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-center text-[10px] text-rose-300 font-bold uppercase italic py-4">No critical risks.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
+</div>
+
+<style>
+    .custom-scroll::-webkit-scrollbar { width: 5px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+</style>
 @endsection

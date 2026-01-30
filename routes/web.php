@@ -57,6 +57,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/members/invite', [WorkspaceController::class, 'inviteMember'])->name('settings.members.invite');
     Route::delete('/settings/members/{user}', [WorkspaceController::class, 'removeMember'])->name('settings.members.remove');
     Route::get('/projects/{project}/accept', [ProjectController::class, 'acceptInvitation'])->name('invitation.accept');
+    Route::post('/tasks/{task}/subtasks', [TaskController::class, 'storeSubTask'])->name('tasks.subtasks.store');
+    Route::post('/settings/members/{user}/role', [WorkspaceController::class, 'updateMemberRole'])->name('settings.members.role');
+    Route::post('/settings/members/{user}/update-dept', [WorkspaceController::class, 'updateMemberDepartment'])->name('settings.members.update-dept');
+    Route::post('/tasks/{task}/archive', [TaskController::class, 'archive'])->name('tasks.archive');
+    Route::post('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('projects.archive');
+    Route::post('/tasks/{task}/unarchive', [TaskController::class, 'unarchive'])->name('tasks.unarchive');
+Route::patch('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('projects.archive');
+Route::patch('/projects/{project}/unarchive', [ProjectController::class, 'unarchive'])->name('projects.unarchive');
+Route::get('/projects/{project}/analytics', [ProjectController::class, 'analytics'])->name('projects.analytics');
 });
 Route::middleware(['auth'])->prefix('setup')->group(function () {
     Route::get('/workspace', [OnboardingController::class, 'workspace'])->name('setup.workspace');

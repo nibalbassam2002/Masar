@@ -71,4 +71,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class, 'project_user')
                     ->withTimestamps();
     }
+
+
+    public function tasks()
+    {
+        // العلاقة مع المهام عبر الجدول الوسيط الذي أنشأناه سابقاً
+        return $this->belongsToMany(Task::class, 'task_user');
+    }
+    
+public function isSuperAdmin()
+{
+    return $this->is_super_admin === 1 || $this->is_super_admin === true;
+}
 }

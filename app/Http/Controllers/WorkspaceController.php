@@ -16,44 +16,86 @@ class WorkspaceController extends Controller
                ?? Workspace::where('owner_id', $user->id)->first();
     }
 
-        public function settingsGroups()
-    {
-        $workspace = $this->getWorkspace();
+    // 1. عرض المجموعات الشخصية فقط
+public function settingsGroups()
+{
+    $workspace = $this->getWorkspace();
+    $user = auth()->user();
 
-        if (!$workspace) {
-            return redirect()->route('setup.workspace');
-        }
+    // جلب فقط المجموعات التي "أنا" أنشأتها في هذه المساحة
+    $groups = $workspace->taskCategories()
+                        ->where('creator_id', $user->id)
+                        ->get(); 
+    
+    // الصفحة الآن مفتوحة للكل (لا يوجد isOwner هنا)
+    return view('settings.groups', compact('workspace', 'groups'));
+}
 
-        $groups = $workspace->taskCategories()->get(); 
-        
-        return view('settings.groups', compact('workspace', 'groups'));
-    }
+// 2. حفظ المجموعة مع ربطها بالمستخدم
+public function storeGroup(Request $request)
+{
+    $request->validate(['name' => 'required|string|max:50']);
+    
+    $workspace = $this->getWorkspace();
+    
+    // إنشاء المجموعة مع إضافة id المستخدم الحالي كـ creator_id
+    $workspace->taskCategories()->create([
+        'name' => $request->name,
+        'color' => '#06b6d4',
+        'creator_id' => auth()->id() // هذا هو السر
+    ]);
 
-    public function storeGroup(Request $request)
-    {
-        $request->validate(['name' => 'required|string|max:50']);
-        
-        $workspace = $this->getWorkspace();
-        
-        $workspace->taskCategories()->create([
-            'name' => $request->name,
-            'color' => '#06b6d4'
-        ]);
-
-        return back()->with('success', 'Work Group added successfully.');
-    }
+    return back()->with('success', 'Your personal work group added.');
+}
 
     public function settingsMembers()
     {
         $workspace = $this->getWorkspace();
+        $user = auth()->user();
 
-        if (!$workspace) {
-            return redirect()->route('setup.workspace');
+        if ($workspace->owner_id !== $user->id) {
+            return view('settings.members', ['workspace' => $workspace, 'members' => collect(), 'isOwner' => false]);
         }
 
-        $members = $workspace->members()->latest()->get();
+        // جلب الأعضاء مع التأكيد على جلب job_title
+        $members = $workspace->members()->withPivot('role', 'job_title')->get();
+
+        // حساب المجموعات بناءً على التخصص (job_title)
+        // ملاحظة: إذا كان الـ job_title فارغاً سيتم تجميعهم معاً ولن يظهروا كقادة
+        $groupsCount = $members->groupBy(function($m) {
+            return $m->pivot->job_title ?? 'no_group';
+        })->map->count();
+
+        foreach ($members as $member) {
+            $title = $member->pivot->job_title;
+            // القائد التلقائي: هو الشخص الوحيد الذي يملك هذا التخصص في الفريق
+            $member->is_auto_lead = ($title && ($groupsCount[$title] ?? 0) === 1);
+        }
+
+        return view('settings.members', compact('workspace', 'members'))->with('isOwner', true);
+    }
+    public function updateMemberRole(Request $request, $userId)
+    {
+        $workspace = $this->getWorkspace();
         
-        return view('settings.members', compact('workspace', 'members'));
+        // التأكد أن المالك فقط من يغير الرتب
+        if ($workspace->owner_id !== auth()->id()) {
+            return back()->with('error', 'Unauthorized action.');
+        }
+
+        $workspace->members()->updateExistingPivot($userId, [
+            'role' => $request->role // 'lead' or 'member'
+        ]);
+
+        return back()->with('success', 'Member role updated successfully.');
+    }
+    public function toggleLead(Request $request, $userId)
+    {
+        $workspace = $this->getWorkspace();
+        $role = $request->is_lead ? 'lead' : 'member';
+        
+        $workspace->members()->updateExistingPivot($userId, ['role' => $role]);
+        return back()->with('success', 'Member role updated.');
     }
 
     public function inviteMember(Request $request)
@@ -101,5 +143,23 @@ class WorkspaceController extends Controller
 
         $workspace->members()->detach($userId);
         return back()->with('success', 'Member removed.');
+    }
+        public function updateMemberDepartment(Request $request, $userId)
+    {
+        $workspace = $this->getWorkspace();
+        
+        // التأكد أن المالك فقط من يملك الصلاحية
+        if ($workspace->owner_id !== auth()->id()) {
+            return back()->with('error', 'Unauthorized.');
+        }
+
+        $request->validate(['job_title' => 'required|string']);
+
+        // تحديث القسم في الجدول الوسيط
+        $workspace->members()->updateExistingPivot($userId, [
+            'job_title' => $request->job_title
+        ]);
+
+        return back()->with('success', 'Member department updated successfully.');
     }
 }

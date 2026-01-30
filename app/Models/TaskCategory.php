@@ -9,7 +9,8 @@ class TaskCategory extends Model
     protected $fillable = [
         'name', 
         'workspace_id', 
-        'color'
+        'color',
+         'creator_id'
     ];
 
     public function workspace()
