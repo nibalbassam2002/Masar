@@ -33,7 +33,6 @@
 </head>
 <body class="mesh-gradient h-screen flex flex-col antialiased overflow-hidden">
 
-    <!-- Top Navigation -->
     <nav class="p-4 lg:p-5 flex justify-between items-center w-full max-w-[1400px] mx-auto shrink-0">
         <a href="/" class="flex items-center gap-0 group">
             <img src="{{ asset('image/logo.png') }}" alt="Masar" class="w-12 h-12 object-contain">
@@ -47,11 +46,9 @@
     <main class="flex-1 flex items-center justify-center p-4 min-h-0">
         <div class="w-full max-w-[1000px] h-full max-h-[650px] grid lg:grid-cols-2 bg-white rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] overflow-hidden border border-slate-100">
             
-            <!-- Left Side: Image Focus -->
             <div class="relative bg-slate-50 p-6 lg:p-10 flex items-center justify-center overflow-hidden">
                 <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-100 rounded-full blur-[80px] opacity-40 -translate-y-1/2 translate-x-1/2"></div>
                 
-                <!-- الصورة الآن بدون تحديد aspect ratio لتأخذ طولها الطبيعي وتكون كاملة -->
                 <div class="relative w-full h-full flex items-center justify-center group">
                     <div class="absolute -inset-4 bg-indigo-500/5 rounded-[2rem] blur-2xl group-hover:bg-indigo-500/10 transition duration-500"></div>
                     <img src="{{ asset('image/6171704.png') }}" 
@@ -60,7 +57,6 @@
                 </div>
             </div>
 
-            <!-- Right Side: Login Form -->
             <div class="p-8 lg:p-12 flex flex-col justify-center bg-white">
                 <div class="max-w-sm mx-auto w-full">
                     <h2 class="text-2xl font-[900] tracking-tight text-slate-900 mb-1">Welcome back.</h2>

@@ -16,7 +16,6 @@
 
     <div class="grid lg:grid-cols-3 gap-12">
         
-        <!-- الجهة اليسرى: فورم الإضافة (متاح للجميع الآن) -->
         <div class="lg:col-span-1">
             <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
                 <h3 class="text-[11px] font-bold text-slate-900 uppercase tracking-widest mb-6">Create New Group</h3>
@@ -33,7 +32,6 @@
             </div>
         </div>
 
-        <!-- الجهة اليمنى: عرض قائمة المجموعات الشخصية فقط -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
                 <table class="w-full text-left border-collapse">

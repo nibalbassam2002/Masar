@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Project;
+use App\Models\Workspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,9 +19,6 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    /**
-     * تسجيل مستخدم جديد + الانضمام للمشروع إذا وجد رابط دعوة
-     */
     public function register(Request $request) {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -36,13 +34,9 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        // تنفيذ عملية الانضمام للمشروع إذا كان قادماً من رابط دعوة
         return $this->handleJoiningProject($user, $request);
     }
 
-    /**
-     * تسجيل دخول مستخدم قديم (مثل حالة هالة) + الانضمام للمشروع
-     */
     public function login(Request $request) {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -53,7 +47,6 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = auth()->user();
 
-            // تنفيذ عملية الانضمام للمشروع حتى للمستخدم القديم
             return $this->handleJoiningProject($user, $request);
         }
 
@@ -62,33 +55,30 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    /**
-     * وظيفة خاصة (Helper) للتعامل مع الانضمام التلقائي للمشاريع
-     * صممتها لتعمل مع الـ Login والـ Register معاً
-     */
+
     private function handleJoiningProject($user, $request) {
-        // إذا كان الرابط يحتوي على رقم مشروع
+     
+        if ($user->isSuperAdmin()) {
+            return redirect()->intended('dashboard');
+        }
+
+       
         if ($request->filled('project_id')) {
             $project = Project::find($request->project_id);
             
             if ($project) {
-                // 1. ربط المستخدم بالمشروع (جدول project_user)
                 $project->users()->syncWithoutDetaching([$user->id]);
-                
-                // 2. ربط المستخدم بمساحة العمل (جدول workspace_user) لكي تظهر له في القائمة
                 $project->workspace->members()->syncWithoutDetaching([
                     $user->id => ['role' => 'member']
                 ]);
 
-                // توجيهه مباشرة للمشروع الذي دُعي إليه لكي يراه فوراً
                 return redirect()->route('projects.show', $project->id)
                                  ->with('success', 'You have joined ' . $project->name);
             }
         }
 
-        // إذا لم تكن هناك دعوة، التوجه للداشبورد كالمعتاد
-        // ملاحظة: إذا كان المستخدم جديداً وليس لديه مساحة عمل، يذهب للإعداد
-        if ($user->workspaces()->count() == 0 && !\App\Models\Workspace::where('owner_id', $user->id)->exists()) {
+    
+        if ($user->workspaces()->count() == 0 && !Workspace::where('owner_id', $user->id)->exists()) {
              return redirect()->route('setup.workspace');
         }
 

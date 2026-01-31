@@ -7,12 +7,10 @@
 @section('content')
 <div class="max-w-[1500px] mx-auto px-8 py-8 space-y-12">
     
-    <!-- 1. Global Page Header -->
     <header class="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-slate-100 pb-8">
         <div class="flex items-center gap-8 flex-1 w-full">
             <h1 class="heading-font text-3xl font-800 text-slate-900 tracking-tighter">Projects</h1>
             
-            <!-- Quick Search Bar -->
             <div class="relative w-full max-w-sm group hidden md:block">
                 <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within:text-cyan-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 <input type="text" placeholder="Jump to project..." 
@@ -26,7 +24,6 @@
         </button>
     </header>
 
-    <!-- 2. Filter Tabs (إضافة جديدة للتنقل بين النشط والمؤرشف) -->
     <div class="flex gap-2 bg-slate-100/50 p-1.5 rounded-2xl w-fit border border-slate-100">
         <a href="{{ route('projects.index', ['filter' => 'active']) }}" 
            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ $filter != 'archived' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-400 hover:text-slate-600' }}">
@@ -38,7 +35,6 @@
         </a>
     </div>
 
-    <!-- 3. Section: Projects I Lead -->
     <section class="space-y-6">
         <div class="flex items-center gap-4">
             <h2 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
@@ -50,8 +46,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             @forelse($ledProjects as $project)
                 <div class="relative group">
-                    <!-- كرت المشروع -->
-                    <a href="{{ route('projects.show', $project->id) }}" class="block bg-white p-7 rounded-[2rem] border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-cyan-400 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+]                    <a href="{{ route('projects.show', $project->id) }}" class="block bg-white p-7 rounded-[2rem] border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-cyan-400 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
                         <div class="flex justify-between items-start mb-6">
                             <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-cyan-600 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -70,7 +65,6 @@
                                 <span class="text-[10px] font-black text-cyan-600">{{ $project->progress }}%</span>
                             </div>
 
-                            <!-- زر الأرشفة (إضافة جديدة) -->
                             <form action="{{ route($project->status == 'archived' ? 'projects.unarchive' : 'projects.archive', $project->id) }}" method="POST" onclick="event.stopPropagation();">
                                 @csrf
                                 @method('PATCH')
@@ -94,7 +88,6 @@
         <div class="pt-4">{{ $ledProjects->appends(['part_page' => $participatingProjects->currentPage(), 'filter' => $filter])->links() }}</div>
     </section>
 
-    <!-- 4. Section: Participating Projects -->
     @if($participatingProjects->total() > 0 || $filter != 'archived')
     <section class="space-y-6 pt-10 border-t border-slate-50">
         <div class="flex items-center gap-4">

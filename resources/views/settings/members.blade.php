@@ -9,7 +9,6 @@
 @section('content')
     <div class="max-w-[1200px] mx-auto px-8 py-10">
 
-        <!-- Header -->
         <header class="flex justify-between items-center mb-12">
             <div>
                 <h1 class="heading-font text-3xl font-[800] text-slate-900 tracking-tight">Team Directory</h1>
@@ -26,7 +25,6 @@
             @endif
         </header>
 
-        <!-- Table Container -->
         <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -44,7 +42,6 @@
                 <tbody class="divide-y divide-slate-50">
 
                     @if ($isOwner)
-                        <!-- 1. عرض المالك أولاً -->
                         <tr class="bg-white">
                             <td class="py-6 px-8">
                                 <div class="flex items-center gap-4">
@@ -69,7 +66,6 @@
                             <td class="py-6 px-8 text-right">—</td>
                         </tr>
 
-                        <!-- 2. عرض باقي الأعضاء -->
                         @foreach ($members as $member)
                             @if ($member->id != $workspace->owner_id)
                                 <tr class="group hover:bg-slate-50/30 transition-all">
@@ -92,14 +88,12 @@
                                                 Departments</span>
                                         @else
                                             @if ($member->pivot->job_title)
-                                                <!-- إذا كان له قسم، نظهره ونسمح بتغييره عند الضغط عليه -->
                                                 <button
                                                     onclick="openAssignModal({{ $member->id }}, '{{ $member->pivot->job_title }}')"
                                                     class="text-[10px] font-black uppercase text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-md border border-cyan-100/50 hover:bg-cyan-100 transition-all">
                                                     {{ $member->pivot->job_title }}
                                                 </button>
                                             @else
-                                                <!-- إذا لم يكن له قسم (حالة أدهم وهالة الآن) -->
                                                 <button onclick="openAssignModal({{ $member->id }}, '')"
                                                     class="text-[9px] font-black uppercase text-rose-500 bg-rose-50 px-2 py-1 rounded-md border border-rose-100 hover:bg-rose-100 animate-pulse transition-all">
                                                     Assign Group +
@@ -109,7 +103,6 @@
                                     </td>
 
                                     <td class="py-6 px-8">
-                                        <!-- عرض حالة القيادة (تلقائية أو يدوية) -->
                                         @if ($member->pivot->role === 'lead' || $member->is_auto_lead)
                                             <span
                                                 class="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-100">Team
@@ -150,7 +143,6 @@
                             @endif
                         @endforeach
                     @else
-                        <!-- إذا لم يكن المالك: عرض صفحة الوصول المقيد -->
                         <tr>
                             <td colspan="4" class="py-32 text-center">
                                 <div class="opacity-20 flex flex-col items-center">
@@ -171,7 +163,6 @@
         </div>
     </div>
 
-    <!-- Modal: Invite Member -->
     <div id="inviteMemberModal" class="hidden fixed inset-0 z-[250] items-center justify-center p-6">
         <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" onclick="toggleModal('inviteMemberModal', false)">
         </div>
@@ -202,7 +193,6 @@
             </form>
         </div>
     </div>
-    <!-- مودال تعيين القسم للأعضاء الموجودين -->
 <div id="assignDeptModal" class="hidden fixed inset-0 z-[300] items-center justify-center p-6">
     <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" onclick="toggleModal('assignDeptModal', false)"></div>
     <div class="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-xs p-8 border border-slate-100 transform transition-all">

@@ -30,14 +30,13 @@ class OnboardingController extends Controller
 {
     $workspace = auth()->user()->workspaces()->first();
     
-    // تصنيفات مقترحة بناءً على الاختيار
     $defaults = match($request->team_type) {
         'development' => ['Frontend', 'Backend', 'QA / Testing'],
         'marketing'   => ['Content', 'Ads', 'Design'],
         default       => ['General', 'Admin'],
     };
 
-    // حفظها في قاعدة البيانات فوراً
+    
     foreach($defaults as $name) {
         $workspace->taskCategories()->create(['name' => $name]);
     }
@@ -55,19 +54,19 @@ class OnboardingController extends Controller
     {
         $user = auth()->user();
 
-        // 1. إنشاء المساحة
+       
         $workspace = \App\Models\Workspace::create([
             'name' => session('setup_workspace_name'),
             'owner_id' => $user->id,
         ]);
 
-        // 2. الربط في الجدول الوسيط (هذا هو السطر الذي كان ينقصنا)
+       
         $workspace->members()->attach($user->id, [
             'role' => 'admin',
             'job_title' => session('setup_team_type') ?? 'Owner'
         ]);
 
-        // 3. إنشاء المشروع
+        
         $workspace->projects()->create([
             'name' => $request->project_name,
             'status' => 'active',

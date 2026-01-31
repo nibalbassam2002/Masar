@@ -75,7 +75,6 @@ class User extends Authenticatable
 
     public function tasks()
     {
-        // العلاقة مع المهام عبر الجدول الوسيط الذي أنشأناه سابقاً
         return $this->belongsToMany(Task::class, 'task_user');
     }
     

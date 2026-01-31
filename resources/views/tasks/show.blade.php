@@ -3,7 +3,6 @@
 @section('content')
     <div class="max-w-[1400px] mx-auto px-8 py-6">
 
-        <!-- 1. سهم الرجوع (Back Arrow) -->
         <div class="mb-6 flex items-center">
             <a href="{{ route('tasks.index') }}" class="group flex items-center gap-3 text-slate-400 hover:text-cyan-600 transition-all">
                 <div class="w-9 h-9 bg-white border border-slate-100 rounded-xl flex items-center justify-center shadow-sm group-hover:border-cyan-200 group-hover:shadow-md transition-all">
@@ -15,7 +14,6 @@
             </a>
         </div>
 
-        <!-- 2. رابط العودة للمهمة الأم (إذا كانت هذه سب تاسك) -->
         @if ($task->parent_id)
             <a href="{{ route('tasks.show', $task->parent_id) }}"
                 class="inline-flex items-center text-[10px] font-black text-cyan-600 uppercase mb-4 hover:underline group">
@@ -31,13 +29,11 @@
             $user = auth()->user();
             $isManager = $task->project->workspace->owner_id === $user->id;
             
-            // جلب المهام الفرعية المسندة لي أنا فقط (لواجهة العضو)
             $mySubTasks = $task->subtasks()->whereHas('assignees', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             })->get();
         @endphp
 
-        <!-- Header -->
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 pb-6 border-b border-slate-100 gap-4">
             <div>
                 <div class="flex items-center gap-3 mb-2">
@@ -60,7 +56,6 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-            <!-- الجهة اليسرى: المحتوى والنقاش -->
             <div class="lg:col-span-8 space-y-12">
                 <div class="space-y-4">
                     <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Detailed Context</h3>
@@ -69,7 +64,6 @@
                     </div>
                 </div>
 
-                <!-- صندوق الملاحظات -->
                 <section class="space-y-6">
                     <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Collaboration Log</h3>
                     <div class="max-h-[400px] overflow-y-auto pr-4 space-y-4 custom-scroll" id="notes-container">
@@ -101,10 +95,8 @@
                 </section>
             </div>
 
-            <!-- الجهة اليمنى: الفريق والملفات -->
             <aside class="lg:col-span-4 space-y-6">
 
-                <!-- 1. Mission Team -->
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm space-y-5">
                     <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400">Mission Team</h4>
                     <div class="space-y-3">
@@ -120,7 +112,6 @@
                     </div>
                 </div>
 
-                <!-- 2. Lead Console -->
                 @if ($canManageBreakdown)
                     <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm space-y-6">
                         <div class="flex items-center justify-between">
@@ -163,7 +154,6 @@
                     </div>
                 @endif
 
-                <!-- 3. My Contribution (العضو) -->
                 @if (!$canManageBreakdown && $mySubTasks->count() > 0)
                     <div class="bg-slate-900 p-8 rounded-[2.5rem] shadow-xl space-y-6">
                         <h4 class="text-[10px] font-black uppercase tracking-widest text-cyan-400">My Contribution</h4>
@@ -184,9 +174,7 @@
                     </div>
                 @endif
 
-                <!-- 4. Shared Evidence (تحميل الملفات) -->
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm space-y-6">
-                    <!-- فورم الرفع الموحد -->
                     <form action="{{ route('tasks.notes.store', $task->id) }}" method="POST" enctype="multipart/form-data" id="evidence-upload-form">
                         @csrf
                         <div class="flex items-center justify-between mb-4">

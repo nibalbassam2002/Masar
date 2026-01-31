@@ -1,12 +1,9 @@
-<!-- Modal: New Project (Premium Masar Style) -->
 <div id="newProjectModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
-    <!-- خلفية ضبابية خفيفة -->
     <div class="absolute inset-0 bg-slate-900/30 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
 
     <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md p-10 transform transition-all scale-95 opacity-0 duration-300 border border-slate-50"
         id="modalContainer">
 
-        <!-- Header Section -->
         <div class="text-center mb-10">
             <div class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">

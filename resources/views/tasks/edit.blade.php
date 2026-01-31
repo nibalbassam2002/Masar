@@ -40,7 +40,6 @@
                             <textarea name="description" rows="10" class="w-full bg-slate-50 rounded-xl p-4 text-sm text-slate-600 border-none focus:ring-2 focus:ring-cyan-500/10 focus:bg-white outline-none transition-all">{{ $task->description }}</textarea>
                         </div>
 
-                        <!-- قائمة السب تاسك الحالية (بدون زر إضافة) -->
                         <div class="space-y-3 pt-6 border-t border-slate-50">
                             <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 ml-1">Existing Sub-tasks</label>
                             <template x-for="(subtask, index) in subtasks" :key="index">
@@ -59,7 +58,6 @@
                 <div class="lg:col-span-4 space-y-5">
                     <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
                         
-                        <!-- تعديل الفريق -->
                         <div>
                             <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Assign Team</label>
                             <select name="assignee_ids[]" multiple required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-700 outline-none focus:ring-4 focus:ring-cyan-500/5 min-h-[120px]">
@@ -69,7 +67,6 @@
                             </select>
                         </div>
 
-                        <!-- تعديل التواريخ (بدء وانتهاء) -->
                         <div class="pt-6 border-t border-slate-50 space-y-4">
                             <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Mission Timeline</label>
                             <div class="bg-slate-50 rounded-xl p-3 border border-transparent focus-within:border-cyan-500 transition-all">

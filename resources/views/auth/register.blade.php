@@ -61,10 +61,8 @@
                     <form action="{{ route('register') }}" method="POST" class="space-y-4">
                         @csrf
                         
-                        <!-- حقل مخفي لحفظ رقم المشروع إذا جاء من دعوة -->
                         <input type="hidden" name="project_id" value="{{ request('project_id') }}">
 
-                        <!-- Full Name -->
                         <div class="space-y-1.5">
                             <label class="block text-[10px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Full Name</label>
                             <input type="text" name="name" value="{{ old('name') }}" required placeholder="e.g. John Doe"
@@ -72,7 +70,6 @@
                             @error('name') <p class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Email (هنا الذكاء: يسحب الإيميل تلقائياً من الرابط) -->
                         <div class="space-y-1.5">
                             <label class="block text-[10px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
                             <input type="email" name="email" value="{{ request('email', old('email')) }}" required placeholder="name@company.com"
@@ -80,7 +77,6 @@
                             @error('email') <p class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Password Group -->
                         <div class="grid grid-cols-2 gap-3">
                             <div class="space-y-1.5">
                                 <label class="block text-[10px] font-[800] uppercase tracking-widest text-slate-400 ml-1">Password</label>
@@ -95,7 +91,6 @@
                             @error('password') <p class="col-span-2 text-red-500 text-[10px] font-bold">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Terms -->
                         <div class="flex items-center gap-3 px-1 py-2">
                             <input type="checkbox" id="terms" required class="w-4 h-4 rounded border-slate-200 text-cyan-600 focus:ring-cyan-500 cursor-pointer">
                             <label for="terms" class="text-[11px] font-bold text-slate-500 cursor-pointer">
@@ -108,13 +103,11 @@
                         </button>
                     </form>
 
-                    <!-- Divider -->
                     <div class="mt-8 relative text-center">
                         <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100"></div></div>
                         <span class="relative bg-white px-4 text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">Fast Access</span>
                     </div>
 
-                    <!-- Google Signup -->
                     <div class="mt-6">
                         <button type="button" class="w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl border border-slate-100 bg-white text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all">
                             <img src="https://www.svgrepo.com/show/355037/google.svg" class="h-4 w-4" alt="Google">

@@ -3,13 +3,11 @@
 @section('content')
 <div class="max-w-[1100px] mx-auto px-8 py-10">
     
-    <!-- 1. العودة للمهمة الأم -->
     <a href="{{ route('tasks.show', $task->parent_id) }}" class="inline-flex items-center text-[10px] font-black text-cyan-600 uppercase mb-6 hover:underline group">
         <svg class="w-3 h-3 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M15 19l-7-7 7-7"/></svg>
         Back to Main Mission: {{ $task->parent?->title }}
     </a>
 
-    <!-- 2. كرت إنجاز العمل (Header) -->
     <div class="bg-slate-900 rounded-[3rem] p-10 shadow-2xl text-white mb-10 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
         <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -32,12 +30,10 @@
         </div>
     </div>
 
-    <!-- فورم الإرسال الموحد (يغلف المحتوى بالكامل لضمان إرسال النص والملف معاً) -->
     <form action="{{ route('tasks.notes.store', $task->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
-            <!-- 3. الجهة اليسرى: الملاحظات والنقاش -->
             <div class="lg:col-span-7 space-y-8">
                 <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Progress Updates</h3>
                 <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8">
@@ -55,7 +51,6 @@
                         @endforelse
                     </div>
 
-                    <!-- منطقة الكتابة (أزلنا الـ Required) -->
                     <textarea name="content" rows="4" class="w-full bg-slate-50 border-none rounded-2xl p-5 text-xs font-medium outline-none focus:ring-4 focus:ring-cyan-500/5 transition-all" placeholder="Tell the lead what you've done..."></textarea>
                     
                     <button type="submit" class="w-full bg-slate-900 text-white py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-cyan-600 transition-all shadow-lg mt-4">
@@ -64,7 +59,6 @@
                 </div>
             </div>
 
-            <!-- 4. الجهة اليمنى: الملفات المرفوعة والمختارة -->
             <div class="lg:col-span-5 space-y-8">
                 <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Evidence & Deliverables</h3>
                 
@@ -72,15 +66,12 @@
                     <div class="flex items-center justify-between">
                         <span class="text-[10px] font-bold text-slate-300 uppercase italic">Shared Files</span>
                         @if($isSubTaskOwner)
-                            <!-- الزر الذي يفتح اختيار الملفات -->
                             <button type="button" onclick="document.getElementById('subtask-file-input').click()" class="text-cyan-600 text-[10px] font-black uppercase hover:underline">+ Upload File</button>
                         @endif
                     </div>
 
-                    <!-- حقل الملف المخفي -->
                     <input type="file" name="file" id="subtask-file-input" class="hidden" onchange="updateFileNameDisplay()">
 
-                    <!-- منطقة عرض الملف المختار (تظهر هنا قبل الرفع) -->
                     <div id="file-preview-zone" class="hidden">
                         <div class="p-4 bg-cyan-50 border border-dashed border-cyan-200 rounded-2xl flex items-center justify-between">
                             <div class="flex items-center gap-2">
@@ -93,7 +84,6 @@
                         </div>
                     </div>
 
-                    <!-- قائمة الملفات المرفوعة فعلياً -->
                     <div class="space-y-3 pt-4 border-t border-slate-50">
                         @forelse($task->attachments as $file)
                             <a href="{{ asset('storage/' . $file->file_path) }}" target="_blank" class="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl hover:bg-cyan-50 transition-all border border-transparent hover:border-cyan-100 group">
@@ -116,7 +106,6 @@
 </div>
 
 <script>
-    // إظهار اسم الملف في جهة اليمين فور اختياره
     function updateFileNameDisplay() {
         const input = document.getElementById('subtask-file-input');
         const previewZone = document.getElementById('file-preview-zone');

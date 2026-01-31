@@ -31,22 +31,18 @@
         }
     </style>
 </head>
-<!-- نغير h-screen ليكون مرناً ونسمح بالسكرول في المحتوى فقط -->
 
 <body class="antialiased bg-[#fcfcfd] text-slate-900 font-['Inter']">
     <div x-data="{ isCompact: false, openMobile: false }" class="relative flex h-screen overflow-hidden">
 
-        <!-- Sidebar: ثابت لا يتحرك -->
         <aside :class="{ 'w-64': !isCompact, 'w-20': isCompact }"
             class="bg-white border-r border-slate-100 flex flex-col h-full shrink-0 transition-all duration-300">
             @include('layouts.partials.sidebar')
         </aside>
 
-        <!-- المنطقة الرئيسية: هي التي تسمح بالتمرير -->
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             @include('layouts.partials.navbar')
 
-            <!-- محتوى الصفحة مع تفعيل السكرول الرأسي -->
             <main class="flex-1 overflow-y-auto custom-scroll">
                 @yield('content')
             </main>

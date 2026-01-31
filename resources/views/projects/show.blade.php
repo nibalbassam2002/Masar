@@ -83,7 +83,6 @@
             }
         </style>
 
-        <!-- 1. Header مع شريط الإنجاز المطور -->
         <header class="bg-white border-b border-slate-200 px-8 py-5 shrink-0 flex items-center justify-between">
             <div>
                 <h1 class="heading-font text-xl font-800 text-slate-900 tracking-tight capitalize">{{ $project->name }}</h1>
@@ -94,7 +93,6 @@
                     $percent = $totalMissions > 0 ? round(($completedMissions / $totalMissions) * 100) : 0;
                 @endphp
 
-                <!-- شريط الإنجاز الجديد -->
                 <div class="mt-2 flex items-center gap-3">
                     <div class="w-32 bg-slate-100 h-1.5 rounded-full overflow-hidden">
                         <div class="bg-cyan-500 h-full transition-all duration-1000" style="width: {{ $percent }}%">
@@ -132,7 +130,6 @@
 
                 @if ($isLeader)
                     <div class="flex items-center gap-2">
-                        <!-- زر الإحصائيات المطور بلونه الجديد (أبيض بحدود لبنية) -->
                         <a href="{{ route('projects.analytics', $project->id) }}"
                             class="w-10 h-10 bg-white border border-slate-200 text-slate-400 rounded-xl flex items-center justify-center hover:text-cyan-600 hover:border-cyan-500 hover:shadow-sm transition-all"
                             title="Project Intelligence">
@@ -149,7 +146,6 @@
             </div>
         </header>
 
-        <!-- 2. Kanban Board -->
         <div class="flex-1 overflow-hidden">
             <div class="board-canvas custom-scroll">
                 @foreach ($columns as $column)
@@ -237,7 +233,6 @@
         </div>
     </div>
 
-    <!-- 3. Modals -->
     <div id="quickViewModal" class="hidden fixed inset-0 z-[300] items-center justify-center p-6">
         <div class="absolute inset-0 bg-slate-950/20 backdrop-blur-sm" onclick="closeQuickView()"></div>
         <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg border border-slate-100 transform transition-all scale-95 opacity-0 overflow-hidden"
@@ -298,7 +293,6 @@
                         class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm outline-none focus:border-cyan-500">
                         <option value="" disabled selected>Select a group...</option>
 
-                        <!-- هنا التعديل: أضفنا unique('name') لمنع التكرار -->
                         @foreach ($project->workspace->taskCategories->unique('name') as $group)
                             <option value="{{ $group->name }}">{{ $group->name }}</option>
                         @endforeach
@@ -311,7 +305,6 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
         let currentTaskId = null;

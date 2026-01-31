@@ -93,7 +93,6 @@
                     </div>
                 </div>
 
-                <!-- Right Side: الإعدادات -->
                 <div class="lg:col-span-4 space-y-5">
                     <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
 
@@ -107,7 +106,6 @@
                                         class="w-full bg-slate-100/50 border-none rounded-xl p-3 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-cyan-500/10">
                                         <option value="" disabled selected>Select one of your projects...</option>
                                         @foreach ($projects as $proj)
-                                            <!-- هنا ستظهر مشاريعك التي أنشئتِها أنتِ فقط -->
                                             <option value="{{ $proj->id }}">{{ $proj->name }}</option>
                                         @endforeach
                                     </select>
@@ -123,7 +121,6 @@
                             <label
                                 class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block ml-1">Assign
                                 Mission To (Select Team)</label>
-                            <!-- أضفنا [] للاسم وكلمة multiple -->
                             <select name="assignee_ids[]" multiple required
                                 class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-700 outline-none focus:ring-4 focus:ring-cyan-500/5 min-h-[120px]">
                                 @foreach ($users as $u)
@@ -162,7 +159,6 @@
                                     </div>
                                 @endforelse
 
-                                <!-- الحل هنا: الزر خارج الـ loop لكي يظهر دائماً -->
                                 <a href="{{ route('settings.groups') }}"
                                     class="text-[10px] font-bold text-cyan-600 uppercase tracking-widest mt-4 block text-center border border-dashed border-cyan-100 p-3 rounded-xl hover:bg-cyan-50 transition-all">
                                     + Manage Work Groups
@@ -204,14 +200,11 @@
         </form>
     </div>
     <script>
-        // كود ذكي: عند تغيير الشخص المختار، قم بتغيير القسم تلقائياً
         document.querySelector('select[name="assignee_id"]').addEventListener('change', function() {
-            // جلب التخصص الخاص بالمستخدم المختار (سنحتاج لإضافته كـ data attribute)
             const selectedOption = this.options[this.selectedIndex];
             const userDept = selectedOption.getAttribute('data-dept');
 
             if (userDept) {
-                // البحث عن الراديو بوتن الذي يحمل نفس اسم القسم وتفعيله
                 const deptRadio = document.querySelector(`input[name="category"][value="${userDept}"]`);
                 if (deptRadio) deptRadio.checked = true;
             }

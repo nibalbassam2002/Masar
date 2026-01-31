@@ -4,8 +4,7 @@
 <div class="min-h-screen bg-[#fcfcfd] pb-20">
     <div class="max-w-[1500px] mx-auto px-10 py-10">
         
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-10">
+]        <div class="flex items-center justify-between mb-10">
             <div class="flex items-center gap-5">
                 <a href="{{ route('projects.show', $project->id) }}" class="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 hover:text-cyan-600 transition-all shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M15 19l-7-7 7-7"/></svg>
@@ -16,9 +15,7 @@
 
         <div class="grid grid-cols-12 gap-8">
             
-            <!-- العمود الأيسر: الإنجاز والحالات -->
             <div class="col-span-12 lg:col-span-4 space-y-6">
-                <!-- كرت الإنجاز الكبير -->
                 <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden">
                     <span class="text-[9px] font-black uppercase tracking-widest text-cyan-400">Total Progress</span>
                     <h2 class="text-7xl font-800 mt-4 tracking-tighter">{{ $overallProgress }}%</h2>
@@ -26,7 +23,6 @@
                         <div class="bg-cyan-500 h-full transition-all duration-1000" style="width: {{ $overallProgress }}%"></div>
                     </div>
                     
-                    <!-- عداد المواعيد المتأخرة -->
                     <div class="mt-8 pt-8 border-t border-white/5 flex justify-between items-center">
                         <div>
                             <span class="text-[8px] font-black text-rose-500 uppercase block">Overdue Missions</span>
@@ -39,7 +35,6 @@
                     </div>
                 </div>
 
-                <!-- توزيع الحالات (هذا ما سيجعلك تري أن الصفحة تعمل) -->
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm space-y-4">
                     <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Status Breakdown</h3>
                     <div class="grid grid-cols-2 gap-3">
@@ -63,9 +58,7 @@
                 </div>
             </div>
 
-            <!-- العمود الأيمن: الأقسام والنشاط -->
             <div class="col-span-12 lg:col-span-8 space-y-8">
-                <!-- الأقسام -->
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
                     <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-8">Departmental Performance</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -89,7 +82,6 @@
                     </div>
                 </div>
 
-                <!-- نبض المشروع -->
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
                     <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-8">Recent Project Activity</h3>
                     <div class="space-y-6">

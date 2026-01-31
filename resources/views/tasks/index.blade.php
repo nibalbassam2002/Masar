@@ -7,7 +7,6 @@
 @section('content')
     <div class="max-w-[1400px] mx-auto px-8 py-8 space-y-8">
 
-        <!-- Header -->
         <header class="flex flex-col md:flex-row justify-between items-end gap-6 pb-6 border-b border-slate-100">
             <div>
                 <h1 class="heading-font text-3xl font-800 text-slate-900 tracking-tight">Mission Control</h1>
@@ -39,7 +38,6 @@
             </div>
         </header>
 
-        <!-- الجدول الموحد الشامل -->
         <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -61,7 +59,6 @@
 
                         <tr class="group hover:bg-slate-50/40 transition-colors {{ $isActuallyMe ? 'bg-cyan-50/20' : '' }}">
 
-                            <!-- 1. Role & Task Title -->
                             <td class="py-6 px-8">
                                 <div class="flex items-center gap-4">
                                     <div class="flex flex-col items-center gap-1">
@@ -81,7 +78,6 @@
                                 </div>
                             </td>
 
-                            <!-- 2. Project -->
                             <td class="py-6 px-8">
                                 <div class="flex flex-col">
                                     <span class="text-xs font-bold text-slate-600">{{ $task->project->name }}</span>
@@ -89,7 +85,6 @@
                                 </div>
                             </td>
 
-                            <!-- 3. Assignee -->
                             <td class="py-6 px-8">
                                 <div class="flex items-center gap-3">
                                     <div class="flex -space-x-2">
@@ -114,14 +109,12 @@
                                 </div>
                             </td>
 
-                            <!-- 4. Status -->
                             <td class="py-6 px-8">
                                 <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter {{ $task->status == 'done' ? 'bg-emerald-50 text-emerald-600' : ($task->status == 'archived' ? 'bg-amber-50 text-amber-600' : 'bg-cyan-50 text-cyan-600') }}">
                                     {{ str_replace('_', ' ', $task->status) }}
                                 </span>
                             </td>
 
-                            <!-- 5. Deadline -->
                             <td class="py-6 px-8">
                                 <div class="flex flex-col">
                                     <span class="text-xs font-bold {{ $task->due_date && \Carbon\Carbon::parse($task->due_date)->isPast() && $task->status != 'done' ? 'text-rose-500' : 'text-slate-500' }}">
@@ -131,10 +124,8 @@
                                 </div>
                             </td>
 
-                            <!-- 6. Actions (المكان الجديد والمنظم للأكواد) -->
                             <td class="py-6 px-8 text-right">
                                 <div class="flex justify-end items-center gap-2">
-                                    <!-- العين للكل دائماً -->
                                     <a href="{{ route('tasks.show', $task->id) }}" class="p-2 text-slate-300 hover:text-cyan-500 transition-all">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                             <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -142,7 +133,6 @@
                                     </a>
 
                                     @if($filter == 'archived')
-                                        <!-- زر الاستعادة (يظهر فقط في الأرشيف) -->
                                         <form action="{{ route('tasks.unarchive', $task->id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all" title="Restore Task">
@@ -152,7 +142,6 @@
                                             </button>
                                         </form>
                                     @else
-                                        <!-- أزرار التعديل والأرشفة (تظهر في النشطة والمكتملة) -->
                                         @if($isManager)
                                             <a href="{{ route('tasks.edit', $task->id) }}" class="p-2 text-slate-300 hover:text-amber-500 transition-all">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -181,7 +170,6 @@
                                     @endif
 
                                     @if ($isManager)
-                                        <!-- حذف نهائي (للمدير فقط) -->
                                         <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Delete permanently?')">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="p-2 text-slate-300 hover:text-rose-500 transition-all">

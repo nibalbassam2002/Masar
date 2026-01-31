@@ -25,11 +25,9 @@
 
 <body class="bg-[#ffffff] text-[#020617] antialiased">
 
-    <!-- Header & Navigation -->
     <nav class="fixed top-0 w-full z-[100] border-b border-slate-100 nav-blur">
         <div class="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-10">
-                <!-- Branding -->
                 <a href="/" class="flex items-center gap-0 group">
                     <div class="flex items-center justify-center overflow-hidden">
                         <img src="{{ asset('image/logo.png') }}" alt="Logo" class="w-15 h-15 object-contain block">
@@ -37,7 +35,6 @@
                     <span class="text-xl font-[800] tracking-tighter uppercase text-indigo-600 ml-[-4px]">Masar</span>
                 </a>
 
-                <!-- Main Menu -->
                 <div class="hidden lg:flex items-center gap-8">
                     <div class="relative group">
                         <button class="flex items-center gap-1 text-[14px] font-semibold text-slate-500 hover:text-black transition-colors">
@@ -76,7 +73,6 @@
                 </div>
             </div>
 
-            <!-- Auth Actions -->
             <div class="flex items-center gap-3">
                 <a href="{{ route('login') }}" class="text-[14px] font-bold px-4 text-slate-500 hover:text-indigo-600 transition">Log in</a>
                 <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-6 py-2.5 rounded-full text-[14px] font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition whitespace-nowrap">
@@ -87,14 +83,12 @@
     </nav>
 
     <main class="pt-16">
-        <!-- Hero & Workspace Preview -->
         <section class="pt-12 pb-32 bg-white overflow-hidden">
             <div class="max-w-[1200px] mx-auto px-6">
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div class="relative group">
                         <div class="absolute -inset-4 bg-indigo-500/5 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition duration-700"></div>
                         <div class="relative space-y-4">
-                            <!-- Task Components -->
                             <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-xl shadow-slate-200/50 w-full md:w-[380px] transform -rotate-2 hover:rotate-0 transition-all duration-500 z-30 relative">
                                 <div class="flex justify-between items-start mb-4">
                                     <span class="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-600 text-[10px] font-bold uppercase tracking-wider">In Progress</span>
@@ -137,7 +131,6 @@
                         </div>
                     </div>
 
-                    <!-- Hero Content -->
                     <div>
                         <span class="text-indigo-600 font-bold text-sm tracking-widest uppercase mb-4 block">Centralized Control</span>
                         <h2 class="text-4xl md:text-5xl font-[800] text-slate-900 leading-[1.1] mb-8 tracking-tight">
@@ -165,7 +158,6 @@
             </div>
         </section>
 
-        <!-- Insights & Intelligence -->
         <section class="py-24 bg-slate-50 border-y border-slate-100 overflow-hidden">
             <div class="max-w-[1200px] mx-auto px-6">
                 <div class="grid lg:grid-cols-2 gap-20 items-center">
@@ -233,7 +225,6 @@
             </div>
         </section>
 
-        <!-- Capabilities Showcase -->
         <section class="py-32 px-6 bg-white overflow-hidden">
             <div class="max-w-[1200px] mx-auto">
                 <div class="text-center mb-24">
@@ -273,7 +264,6 @@
                             </div>
                         </div>
 
-                        <!-- Developer Attribution -->
                         <div class="absolute -bottom-6 -left-10 bg-indigo-600 text-white p-5 rounded-3xl shadow-2xl flex items-center gap-4 animate-bounce-slow z-50">
                             <div class="w-12 h-12 rounded-full border-2 border-white/30 overflow-hidden shrink-0 shadow-inner">
                                 <img src="{{ asset('image/your-profile.jpeg') }}" alt="Developer" class="w-full h-full object-cover">
@@ -310,7 +300,6 @@
             </div>
         </section>
 
-        <!-- Final Conversion CTA -->
         <section class="py-32 px-6">
             <div class="max-w-[1200px] mx-auto relative overflow-hidden bg-slate-950 rounded-[3rem] p-12 md:p-24 text-center group">
                 <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px] group-hover:bg-indigo-600/30 transition-all duration-700"></div>
@@ -339,7 +328,6 @@
         </section>
     </main>
 
-    <!-- Project Footer -->
     <footer class="pt-24 pb-12 px-6 border-t border-slate-100 bg-white">
         <div class="max-w-[1200px] mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-start gap-16 mb-20">

@@ -12,7 +12,7 @@ class TaskNote extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
-    // app/Models/TaskNote.php
+ 
 
 public function task()
 {

@@ -11,7 +11,6 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         
-        /* حركة بسيطة عند اختيار التخصص */
         .focus-radio:checked + .focus-content {
             border-color: #4f46e5;
             background-color: #f8faff;
@@ -25,24 +24,20 @@
 </head>
 <body class="bg-[#F9FAFB] antialiased">
 
-    <!-- Progress Bar (نفس نمط الصفحة الأولى) -->
     <div class="fixed top-0 left-0 w-full h-1 bg-gray-100 z-50">
         <div class="h-full bg-indigo-600 transition-all duration-700" style="width: 66%"></div>
     </div>
 
     <main class="min-h-screen flex flex-col items-center justify-center p-6">
         
-        <div class="w-full max-w-2xl"> <!-- وسعنا الحاوية قليلاً لتناسب الشبكة -->
+        <div class="w-full max-w-2xl"> 
             
-            <!-- البطاقة المركزية (نفس نمط الصفحة الأولى) -->
             <div class="bg-white border border-gray-100 rounded-[2.5rem] p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
                 
-                <!-- أيقونة علوية هادئة -->
                 <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-sm">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
 
-                <!-- النصوص -->
                 <div class="text-center mb-10">
                     <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">How will you use Masar?</h1>
                     <p class="text-gray-500 mt-3 text-sm leading-relaxed max-w-xs mx-auto">
@@ -50,13 +45,11 @@
                     </p>
                 </div>
 
-                <!-- نموذج الاختيار -->
                 <form action="{{ route('setup.team') }}" method="POST" class="space-y-8">
                     @csrf
                     
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                         
-                        <!-- الخيارات (تكرر لكل نوع) -->
                         <label class="cursor-pointer">
                             <input type="radio" name="team_type" value="development" class="hidden focus-radio" checked>
                             <div class="focus-content p-5 border border-gray-100 rounded-2xl text-center transition-all hover:border-indigo-200 group">
@@ -119,7 +112,6 @@
 
                     </div>
 
-                    <!-- الزر (نفس نمط الصفحة الأولى) -->
                     <button type="submit" class="w-full bg-gray-950 text-white py-4.5 rounded-xl font-bold text-sm tracking-wide hover:bg-indigo-600 transition-all shadow-lg shadow-gray-100 active:scale-[0.98]">
                         Continue Setup →
                     </button>
@@ -127,7 +119,6 @@
 
             </div>
 
-            <!-- الخطوات (نفس نمط الصفحة الأولى) -->
             <div class="mt-12 text-center">
                 <p class="text-[10px] font-bold text-gray-300 uppercase tracking-[0.2em]">Step 2 of 3</p>
             </div>

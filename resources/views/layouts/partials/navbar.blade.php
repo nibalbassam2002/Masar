@@ -1,6 +1,5 @@
 <nav class="h-16 bg-white border-b border-slate-100 px-8 flex items-center justify-between shrink-0 sticky top-0 z-40">
 
-    <!-- Left: Search Bar (نحيف واحترافي) -->
     <div class="flex-1 max-w-md">
         <div class="relative group">
             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-cyan-500 transition-colors"
@@ -12,10 +11,8 @@
         </div>
     </div>
 
-    <!-- Right: Notifications & User Dropdown -->
     <div class="flex items-center gap-2">
 
-        <!-- Notifications -->
         <button
             class="p-2 text-slate-400 hover:text-cyan-600 hover:bg-slate-50 rounded-xl transition-all relative mr-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -25,10 +22,8 @@
             <span class="absolute top-2 right-2 w-2 h-2 bg-rose-500 border-2 border-white rounded-full"></span>
         </button>
 
-        <!-- Vertical Divider -->
         <div class="h-8 w-px bg-slate-100 mx-2"></div>
 
-        <!-- User Profile Dropdown (نستخدم Alpine.js للتفاعل) -->
         <div x-data="{ open: false }" class="relative">
             <button @click="open = !open" @click.away="open = false"
                 class="flex items-center gap-3 p-1.5 pr-3 rounded-2xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100 group">
@@ -37,23 +32,18 @@
                         class="w-full h-full object-cover">
                 </div>
                 <div class="hidden md:block text-left">
-                    <!-- اسم المستخدم -->
                     <p class="text-xs font-black text-slate-900 leading-none mb-1">
                         {{ auth()->user()->name }}
                     </p>
 
-                    <!-- الدور الديناميكي في مساحة العمل -->
                     <p class="text-[9px] font-bold text-cyan-600 uppercase tracking-widest truncate">
                         @php
-                            // جلب مساحة العمل الحالية التي يتواجد فيها المستخدم الآن
                             $currentWorkspace = auth()->user()->workspaces()->first();
                         @endphp
 
                         @if ($currentWorkspace)
-                            {{-- جلب الدور (Admin/Member) من الجدول الوسيط بذكاء --}}
                             {{ auth()->user()->roleInWorkspace($currentWorkspace->id) }}
                         @else
-                            {{-- إذا لم ينضم لأي مساحة بعد --}}
                             Workspace Member
                         @endif
                     </p>
@@ -65,7 +55,6 @@
                 </svg>
             </button>
 
-            <!-- Dropdown Content: النسخة الفخمة -->
             <div x-show="open" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 translate-y-2 scale-95"
                 x-transition:enter-end="opacity-100 translate-y-0 scale-100" x-cloak
