@@ -19,10 +19,7 @@ class Workspace extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    /**
-     * علاقة الأعضاء: المساحة تضم العديد من المستخدمين (الفريق)
-     * نستخدم الجدول الوسيط workspace_user الذي أنشأناه
-     */
+ 
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'workspace_user')
@@ -30,9 +27,7 @@ class Workspace extends Model
                     ->withTimestamps();
     }
 
-    /**
-     * علاقة المشاريع: المساحة تضم العديد من المشاريع
-     */
+
     public function projects(): HasMany
     {
         return $this->hasMany(Project::class);

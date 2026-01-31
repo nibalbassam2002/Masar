@@ -111,4 +111,33 @@ class DashboardController extends Controller
             'criticalMissions', 'teamWorkload', 'activeCount', 'doneCount', 'workspaceGroups'
         ));
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q');
+        $user = auth()->user();
+
+        if (empty($query)) return response()->json(['projects' => [], 'tasks' => []]);
+
+        $projectsQuery = \App\Models\Project::where('name', 'like', "%{$query}%");
+        if (!$user->isSuperAdmin()) {
+            $projectsQuery->whereHas('workspace', fn($q) => $q->where('owner_id', $user->id))
+                        ->orWhereHas('users', fn($q) => $q->where('user_id', $user->id));
+        }
+        $projects = $projectsQuery->take(5)->get(['id', 'name']);
+
+        $tasksQuery = \App\Models\Task::where('title', 'like', "%{$query}%")->whereNull('parent_id');
+        if (!$user->isSuperAdmin()) {
+            $tasksQuery->where(fn($q) => 
+                $q->whereHas('assignees', fn($inner) => $inner->where('user_id', $user->id))
+                ->orWhere('creator_id', $user->id)
+            );
+        }
+        $tasks = $tasksQuery->take(5)->get(['id', 'title']);
+
+        return response()->json([
+            'projects' => $projects,
+            'tasks' => $tasks
+        ]);
+    }
 }

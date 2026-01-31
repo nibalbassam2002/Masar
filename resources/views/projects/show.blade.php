@@ -130,18 +130,21 @@
 
                 @if ($isLeader)
                     <div class="flex items-center gap-2">
-                        <a href="{{ route('projects.analytics', $project->id) }}"
-                            class="w-10 h-10 bg-white border border-slate-200 text-slate-400 rounded-xl flex items-center justify-center hover:text-cyan-600 hover:border-cyan-500 hover:shadow-sm transition-all"
-                            title="Project Intelligence">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                                    stroke-width="2.5" />
-                            </svg>
-                        </a>
+
                         <a href="{{ route('tasks.create', $project->id) }}"
                             class="btn-primary !px-5 !py-2.5 text-[11px] shadow-cyan-100">New Task</a>
                     </div>
+                @endif
+                @if (auth()->user()->isSuperAdmin())
+                    <a href="{{ route('projects.analytics', $project->id) }}"
+                        class="w-10 h-10 bg-slate-50 text-slate-400 rounded-xl flex items-center justify-center hover:text-cyan-600 transition-all"
+                        title="Quick Analytics">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                                stroke-width="2.5" />
+                        </svg>
+                    </a>
                 @endif
             </div>
         </header>
@@ -380,7 +383,7 @@
                     modal.classList.replace('hidden', 'flex');
                     setTimeout(() => {
                         document.getElementById('quickViewContainer').classList.replace('scale-95',
-                        'scale-100');
+                            'scale-100');
                         document.getElementById('quickViewContainer').classList.replace('opacity-0',
                             'opacity-100');
                     }, 10);
@@ -436,5 +439,30 @@
                 status.classList.replace('text-slate-400', 'text-cyan-600');
             }
         }
+        // دالة حذف الملاحظة
+function deleteNote(noteId) {
+    if (!confirm('Are you sure you want to delete this message?')) return;
+
+    fetch(`/notes/${noteId}`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            "Accept": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            // تحديث القائمة فوراً لإخفاء الملاحظة المحذوفة
+            openQuickView(currentTaskId);
+        } else {
+            alert(data.error || "You don't have permission to delete this.");
+        }
+    })
+    .catch(err => {
+        console.error('Delete error:', err);
+        alert("Connection error.");
+    });
+}
     </script>
 @endsection

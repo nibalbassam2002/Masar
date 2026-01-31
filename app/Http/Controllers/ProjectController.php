@@ -10,18 +10,30 @@ use Illuminate\Support\Facades\Mail;
 class ProjectController extends Controller
 {
 
-   public function index(Request $request)
+public function index(Request $request)
 {
     $user = auth()->user();
-    
     $filter = $request->query('filter', 'active');
+    if ($user->isSuperAdmin()) {
+        $query = Project::with('workspace');
 
-    
+        
+        if ($filter == 'archived') {
+            $query->where('status', 'archived');
+        } else {
+            $query->where('status', '!=', 'archived');
+        }
+
+        $ledProjects = $query->oldest()->paginate(12, ['*'], 'led_page');
+        $participatingProjects = collect(); 
+
+        return view('projects.index', compact('ledProjects', 'participatingProjects', 'filter'));
+    }
+
     $workspace = $user->workspaces()->where('owner_id', $user->id)->first();
     
     if ($workspace) {
         $ledQuery = $workspace->projects();
-       
         if ($filter == 'archived') {
             $ledQuery->where('status', 'archived');
         } else {
@@ -32,9 +44,8 @@ class ProjectController extends Controller
         $ledProjects = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12);
     }
 
-
     $myWorkspaceId = $workspace ? $workspace->id : 0;
-    $partQuery = $user->projects()->where('workspace_id', '!=', $myWorkspaceId);
+    $partQuery = $user->projects()->where('projects.workspace_id', '!=', $myWorkspaceId);
     
     if ($filter == 'archived') {
         $partQuery->where('status', 'archived');
@@ -140,90 +151,77 @@ public function acceptInvitation(Request $request, Project $project)
 
 public function archive(Project $project)
 {
-   
-    if ($project->workspace->owner_id !== auth()->id()) {
-        return back()->with('error', 'Only the Project Owner can archive this project.');
-    }
-
- 
-    $project->update(['status' => 'archived']);
-
-    $project->tasks()->update(['status' => 'archived']);
-
-    return redirect()->route('projects.index', ['filter' => 'archived'])
-                     ->with('success', 'Project and all its tasks have been suspended.');
-}
-
-
-public function unarchive(Project $project)
-{
-    
-    if ($project->workspace->owner_id !== auth()->id()) {
+    if ($project->workspace->owner_id !== auth()->id() && !auth()->user()->isSuperAdmin()) {
         return back()->with('error', 'Unauthorized action.');
     }
 
-   
-    $project->update(['status' => 'active']);
+    $project->update(['status' => 'archived']);
+    // أرشفة المهام التابعة له أيضاً
+    $project->tasks()->update(['status' => 'archived']);
 
+    return back()->with('success', 'Project moved to archive.');
+}
+
+public function unarchive(Project $project)
+{
+    if ($project->workspace->owner_id !== auth()->id() && !auth()->user()->isSuperAdmin()) {
+        return back()->with('error', 'Unauthorized action.');
+    }
+
+    $project->update(['status' => 'active']);
+    // إعادة المهام لحالة النشاط
     $project->tasks()->update(['status' => 'todo']);
 
-    return redirect()->route('projects.index')->with('success', 'Project and tasks restored to active list.');
+    return back()->with('success', 'Project restored successfully.');
 }
 public function analytics(Project $project)
 {
-    if (auth()->id() !== $project->workspace->owner_id) {
-        abort(403, 'Unauthorized. Only the Project Owner can access analytics.');
-    }
-
-    $project->load(['tasks.assignees', 'users', 'workspace.members', 'tasks.notes.user']);
     $user = auth()->user();
-    if ($project->workspace->owner_id !== $user->id) { return abort(403); }
 
-    $project->load(['tasks.assignees', 'tasks.creator', 'workspace.members']);
-
-  
-    $allTasks = $project->tasks()->whereNull('parent_id')->get();
-    $totalCount = $allTasks->count();
-    
-    $doneCount = $allTasks->where('status', 'done')->count();
-    $progressCount = $allTasks->where('status', 'in_progress')->count();
-    $todoCount = $allTasks->where('status', 'todo')->count();
-    $reviewCount = $allTasks->where('status', 'review')->count();
-
- 
-    $overallProgress = $totalCount > 0 ? round(($doneCount / $totalCount) * 100) : 0;
-    
-
-    $overdueTasks = $allTasks->where('status', '!=', 'done')
-                             ->where('due_date', '<', now()->format('Y-m-d'))->count();
-
-   
-    $categoryStats = $allTasks->groupBy('category')->map(function($tasks, $category) use ($project) {
-        $lead = $project->workspace->members()->wherePivot('role', 'lead')->wherePivot('job_title', $category)->first();
-        $firstTask = $tasks->first();
+    if ($user->isSuperAdmin() || $project->workspace->owner_id === $user->id) {
         
-       
-        if ($lead) { $name = $lead->name; }
-        elseif ($firstTask->assignees->isNotEmpty()) { $name = $firstTask->assignees->first()->name; }
-        else { $name = $firstTask->creator->name; }
+        // جلب البيانات المطلوبة للرسومات البيانية
+        $project->load(['tasks.assignees', 'tasks.creator', 'workspace.members', 'tasks.notes.user']);
 
-        return (object)[
-            'category' => $category,
-            'display_name' => $name,
-            'total' => $tasks->count(),
-            'done' => $tasks->where('status', 'done')->count(),
-            'percent' => round(($tasks->where('status', 'done')->count() / $tasks->count()) * 100)
-        ];
-    });
+        $allTasks = $project->tasks()->whereNull('parent_id')->get();
+        $totalCount = $allTasks->count();
+        $doneCount = $allTasks->where('status', 'done')->count();
+        $progressCount = $allTasks->where('status', 'in_progress')->count();
+        $todoCount = $allTasks->where('status', 'todo')->count();
+        $reviewCount = $allTasks->where('status', 'review')->count();
 
+        $overallProgress = $totalCount > 0 ? round(($doneCount / $totalCount) * 100) : 0;
+        $overdueTasks = $allTasks->where('status', '!=', 'done')
+                                 ->where('due_date', '<', now()->format('Y-m-d'))->count();
 
-    $recentActivity = \App\Models\TaskNote::whereHas('task', function($q) use ($project) {
-        $q->where('project_id', $project->id);
-    })->with('user', 'task')->latest()->take(10)->get();
+        $categoryStats = $allTasks->groupBy('category')->map(function($tasks, $category) use ($project) {
+            $lead = $project->workspace->members()->wherePivot('role', 'lead')->wherePivot('job_title', $category)->first();
+            $firstTask = $tasks->first();
+            
+            if ($lead) { $name = $lead->name; }
+            elseif ($firstTask->assignees->isNotEmpty()) { $name = $firstTask->assignees->first()->name; }
+            else { $name = $firstTask->creator?->name ?? 'System'; }
 
-    return view('projects.analytics', compact(
-        'project', 'totalCount', 'doneCount', 'progressCount', 'todoCount', 'reviewCount',
-        'overallProgress', 'categoryStats', 'recentActivity', 'overdueTasks'
-    ));
+            return (object)[
+                'category' => $category,
+                'display_name' => $name,
+                'total' => $tasks->count(),
+                'done' => $tasks->where('status', 'done')->count(),
+                'percent' => round(($tasks->where('status', 'done')->count() / $tasks->count()) * 100)
+            ];
+        });
+
+        $recentActivity = \App\Models\TaskNote::whereHas('task', function($q) use ($project) {
+            $q->where('project_id', $project->id);
+        })->with('user', 'task')->latest()->take(10)->get();
+
+        return view('projects.analytics', compact(
+            'project', 'totalCount', 'doneCount', 'progressCount', 'todoCount', 'reviewCount',
+            'overallProgress', 'categoryStats', 'recentActivity', 'overdueTasks'
+        ));
+
+    } else {
+        abort(403, 'Unauthorized access.');
+    }
 }
 }

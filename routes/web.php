@@ -59,9 +59,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/tasks/{task}/archive', [TaskController::class, 'archive'])->name('tasks.archive');
     Route::post('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('projects.archive');
     Route::post('/tasks/{task}/unarchive', [TaskController::class, 'unarchive'])->name('tasks.unarchive');
-Route::patch('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('projects.archive');
-Route::patch('/projects/{project}/unarchive', [ProjectController::class, 'unarchive'])->name('projects.unarchive');
-Route::get('/projects/{project}/analytics', [ProjectController::class, 'analytics'])->name('projects.analytics');
+    Route::patch('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('projects.archive');
+    Route::patch('/projects/{project}/unarchive', [ProjectController::class, 'unarchive'])->name('projects.unarchive');
+    Route::get('/projects/{project}/analytics', [ProjectController::class, 'analytics'])->name('projects.analytics');
+    Route::get('/global-search', [DashboardController::class, 'search'])->name('global.search');
 });
 Route::middleware(['auth'])->prefix('setup')->group(function () {
     Route::get('/workspace', [OnboardingController::class, 'workspace'])->name('setup.workspace');
@@ -72,5 +73,15 @@ Route::middleware(['auth'])->prefix('setup')->group(function () {
     
     Route::get('/first-project', [OnboardingController::class, 'project'])->name('setup.project');
     Route::post('/first-project', [OnboardingController::class, 'storeProject']);
+});
+// مسارات الصفحات التعريفية (Footer Links)
+Route::prefix('info')->group(function () {
+    Route::get('/roadmap', fn() => view('pages.roadmap'))->name('roadmap');
+    Route::get('/integrations', fn() => view('pages.integrations'))->name('integrations');
+    Route::get('/documentation', fn() => view('pages.docs'))->name('docs');
+    Route::get('/help-center', fn() => view('pages.help'))->name('help');
+    Route::get('/privacy', fn() => view('pages.privacy'))->name('privacy');
+    Route::get('/terms', fn() => view('pages.terms'))->name('terms');
+    Route::get('/community', fn() => view('pages.community'))->name('community');
 });
 

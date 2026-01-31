@@ -4,7 +4,7 @@
 <div class="min-h-screen bg-[#fcfcfd] pb-20">
     <div class="max-w-[1500px] mx-auto px-10 py-10">
         
-]        <div class="flex items-center justify-between mb-10">
+        <div class="flex items-center justify-between mb-10">
             <div class="flex items-center gap-5">
                 <a href="{{ route('projects.show', $project->id) }}" class="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 hover:text-cyan-600 transition-all shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M15 19l-7-7 7-7"/></svg>

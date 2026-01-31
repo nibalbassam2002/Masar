@@ -47,4 +47,5 @@ public function subtasks()
 {
     return $this->belongsTo(User::class, 'creator_id');
 }
+
 }
