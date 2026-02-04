@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
         return $user->isSuperAdmin() ? true : null;
     });
+     if (app()->environment('production')) {
+        URL::forceScheme('https');
+    }
     }
     
 }
