@@ -8,6 +8,8 @@ use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorkspaceController;
+use Illuminate\Support\Facades\Artisan;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::middleware('guest')->group(function () {
@@ -85,3 +87,11 @@ Route::prefix('info')->group(function () {
     Route::get('/community', fn() => view('pages.community'))->name('community');
 });
 
+Route::get('/run-migrations', function () {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return "تم إنشاء الجداول بنجاح!<br><pre>" . Artisan::output() . "</pre>";
+    } catch (\Exception $e) {
+        return "حدث خطأ أثناء الميغريشن: " . $e->getMessage();
+    }
+});
