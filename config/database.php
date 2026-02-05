@@ -93,7 +93,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' => 'public',
+            'search_path' => 'public', //
             'sslmode' => 'require',
             'options' => (extension_loaded('pdo_pgsql') && defined('PDO::PGSQL_ATTR_SSL_MODE')) ? [
                 PDO::PGSQL_ATTR_SSL_MODE => PDO::PGSQL_SSL_REQUIRE,
