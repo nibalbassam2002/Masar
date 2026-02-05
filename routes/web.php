@@ -91,17 +91,15 @@ Route::prefix('info')->group(function () {
 
 Route::get('/run-migrations', function () {
     try {
-        // إغلاق أي اتصال مفتوح لتجنب تداخل العمليات الفاشلة
         DB::disconnect();
 
-        // إجبار لارافل على استخدام الإعدادات الصحيحة يدوياً قبل التشغيل
-        Config::set('database.connections.pgsql.host', 'ep-quiet-block-ai3hziv4.us-east-1.aws.neon.tech');
+        // العنوان الصحيح كما هو في صورة Neon
+        Config::set('database.connections.pgsql.host', 'ep-quiet-block-ai3hziv4.c-4.us-east-1.aws.neon.tech');
         Config::set('database.connections.pgsql.username', 'neondb_owner');
         Config::set('database.connections.pgsql.password', 'npg_LzBdQYk4DR1c');
         Config::set('database.connections.pgsql.database', 'neondb');
         Config::set('database.connections.pgsql.sslmode', 'require');
         
-        // تشغيل الميغريشن
         Artisan::call('migrate:fresh', ['--force' => true]);
         
         return "تمت المهمة بنجاح! قاعدة البيانات جاهزة الآن.<br><pre>" . Artisan::output() . "</pre>";
