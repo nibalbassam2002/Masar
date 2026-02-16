@@ -33,7 +33,6 @@
 
                 <!-- Desktop Menu -->
                 <div class="hidden lg:flex items-center gap-8">
-                    <a href="#" class="text-[14px] font-semibold text-slate-500 hover:text-black transition">Solutions</a>
                     <a href="{{ route('docs') }}" class="text-[14px] font-semibold text-slate-500 hover:text-black transition">Docs</a>
                     <a href="{{route('community')}}" class="text-[14px] font-semibold text-slate-500 hover:text-black transition">Community</a>
                 </div>
@@ -234,54 +233,56 @@
                     <p class="text-base lg:text-lg text-slate-400 mb-10 max-w-xl mx-auto">No subscriptions, no hidden fees. Built to empower teams completely free.</p>
                     <div class="flex flex-col sm:flex-row justify-center items-center gap-4 lg:gap-6">
                         <a href="{{ route('register') }}" class="w-full sm:w-auto bg-indigo-600 text-white px-8 lg:px-10 py-4 lg:py-5 rounded-2xl font-bold text-base lg:text-lg hover:bg-indigo-500 transition-all shadow-xl">Get started free</a>
-                        <a href="#" class="w-full sm:w-auto bg-white/5 border border-white/10 text-white px-8 lg:px-10 py-4 lg:py-5 rounded-2xl font-bold text-base lg:text-lg hover:bg-white/10 transition-all">Documentation</a>
+                        <a href="{{ route('docs') }}" class="w-full sm:w-auto bg-white/5 border border-white/10 text-white px-8 lg:px-10 py-4 lg:py-5 rounded-2xl font-bold text-base lg:text-lg hover:bg-white/10 transition-all">Documentation</a>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
+   <!-- Footer المحدث مع روابط Laravel الأصلية -->
     <footer class="pt-20 pb-12 px-6 border-t border-slate-100 bg-white">
         <div class="max-w-[1200px] mx-auto">
-            <div class="flex flex-col lg:flex-row justify-between items-start gap-12 mb-16">
+            <div class="flex flex-col lg:flex-row justify-between items-start gap-16 mb-20">
                 <div class="max-w-xs text-left">
                     <a href="/" class="flex items-center gap-0 mb-6 group">
                         <img src="{{ asset('image/logo.png') }}" alt="Logo" class="w-10 h-10 object-contain">
                         <span class="text-2xl font-[900] tracking-tighter uppercase text-indigo-600 ml-[-4px]">Masar</span>
                     </a>
-                    <p class="text-slate-500 text-sm italic">Empowering teams through clarity and speed.</p>
+                    <p class="text-slate-500 leading-relaxed text-sm italic text-left">Empowering teams to reach their highest potential through clarity, speed, and intelligence.</p>
                 </div>
 
+                <!-- الروابط البرمجية (استدعاء الـ Routes) -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-12 lg:gap-24 text-left">
                     <div class="space-y-4">
-                        <h5 class="text-xs font-black text-slate-900 uppercase tracking-widest">Platform</h5>
-                        <ul class="space-y-2 text-sm text-slate-500">
-                            <li><a href="#" class="hover:text-indigo-600 transition">Roadmap</a></li>
-                            <li><a href="#" class="hover:text-indigo-600 transition">Integrations</a></li>
+                        <h5 class="text-xs font-black text-slate-900 uppercase tracking-[0.2em]">Platform</h5>
+                        <ul class="space-y-4">
+                            <li><a href="{{ route('roadmap') }}" class="text-sm text-slate-500 hover:text-indigo-600 transition-colors">Roadmap</a></li>
+                            <li><a href="{{ route('integrations') }}" class="text-sm text-slate-500 hover:text-indigo-600 transition-colors">Integrations</a></li>
                         </ul>
                     </div>
                     <div class="space-y-4">
-                        <h5 class="text-xs font-black text-slate-900 uppercase tracking-widest">Resources</h5>
-                        <ul class="space-y-2 text-sm text-slate-500">
-                            <li><a href="#" class="hover:text-indigo-600 transition">Documentation</a></li>
-                            <li><a href="#" class="hover:text-indigo-600 transition">Help Center</a></li>
+                        <h5 class="text-xs font-black text-slate-900 uppercase tracking-[0.2em]">Resources</h5>
+                        <ul class="space-y-4">
+                            <li><a href="{{ route('docs') }}" class="text-sm text-slate-500 hover:text-indigo-600 transition-colors">Documentation</a></li>
+                            <li><a href="{{ route('help') }}" class="text-sm text-slate-500 hover:text-indigo-600 transition-colors">Help Center</a></li>
                         </ul>
                     </div>
                     <div class="space-y-4">
-                        <h5 class="text-xs font-black text-slate-900 uppercase tracking-widest">Legal</h5>
-                        <ul class="space-y-2 text-sm text-slate-500">
-                            <li><a href="#" class="hover:text-indigo-600 transition">Privacy</a></li>
-                            <li><a href="#" class="hover:text-indigo-600 transition">Terms</a></li>
+                        <h5 class="text-xs font-black text-slate-900 uppercase tracking-[0.2em]">Legal</h5>
+                        <ul class="space-y-4">
+                            <li><a href="{{ route('privacy') }}" class="text-sm text-slate-500 hover:text-indigo-600 transition-colors">Privacy</a></li>
+                            <li><a href="{{ route('terms') }}" class="text-sm text-slate-500 hover:text-indigo-600 transition-colors">Terms</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="pt-8 border-t border-slate-50 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div class="pt-12 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-6">
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">© 2025 Masar. All rights reserved.</p>
                 <div class="flex items-center gap-2 font-black text-slate-400 text-[10px] uppercase tracking-widest">
-                    <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>Systems Operational
+                    <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                    <p>Systems Operational</p>
                 </div>
             </div>
         </div>

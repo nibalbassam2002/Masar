@@ -51,19 +51,28 @@
             <img src="{{ asset('image/logo.png') }}" alt="Masar" class="w-10 h-10 lg:w-12 lg:h-12 object-contain">
             <span class="text-lg font-[900] tracking-tighter uppercase text-indigo-600 ml-[-4px]">Masar</span>
         </a>
-        <div class="text-[11px] lg:text-sm font-bold text-slate-400">
-            <a href="{{ route('register') }}" class="text-indigo-600 hover:underline">Register</a>
+
+        <div class="flex items-center gap-4 lg:gap-6">
+            <a href="javascript:history.back()"
+                class="flex items-center gap-1 text-[11px] lg:text-sm font-bold text-slate-400 hover:text-indigo-600 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+
+            <span class="h-3 w-[1px] bg-slate-200"></span> <a href="{{ route('register') }}"
+                class="text-[11px] lg:text-sm font-bold text-indigo-600 hover:underline">
+                Register
+            </a>
         </div>
     </nav>
-
-    <!-- items-start ترفع المحتوى للأعلى في الموبايل -->
     <main class="flex-1 flex items-start lg:items-center justify-center p-4 lg:p-8">
 
-        <!-- mt-4 لترك مسافة بسيطة من الأعلى في الموبايل -->
+
         <div
             class="w-full max-w-[1000px] mt-4 lg:mt-0 grid grid-cols-1 lg:grid-cols-2 bg-white rounded-[2rem] lg:rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] overflow-hidden border border-slate-100">
-
-            <!-- الصورة تظهر فقط في الشاشات الكبيرة -->
             <div class="hidden lg:flex relative bg-slate-50 p-10 items-center justify-center overflow-hidden">
                 <div
                     class="absolute top-0 right-0 w-64 h-64 bg-indigo-100 rounded-full blur-[80px] opacity-40 -translate-y-1/2 translate-x-1/2">
@@ -95,7 +104,8 @@
                                 <label
                                     class="block text-[10px] font-extrabold uppercase text-slate-400">Password</label>
                                 <a href="#"
-                                    class="text-[10px] font-black text-indigo-600 hover:text-indigo-700">forget password?</a>
+                                    class="text-[10px] font-black text-indigo-600 hover:text-indigo-700">forget
+                                    password?</a>
                             </div>
                             <input type="password" name="password" required placeholder="*******" class="input-style">
                         </div>
@@ -124,7 +134,7 @@
                     <button
                         class="w-full mt-6 flex items-center justify-center gap-3 py-3 rounded-xl border border-slate-100 text-[11px] font-bold text-slate-600 hover:bg-slate-50 transition-all">
                         <img src="https://www.svgrepo.com/show/355037/google.svg" class="h-4 w-4" alt="Google">
-                       Continue with Google
+                        Continue with Google
                     </button>
                 </div>
             </div>

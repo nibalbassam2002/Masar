@@ -51,8 +51,24 @@
             <img src="{{ asset('image/logo.png') }}" alt="Masar" class="w-10 h-10 lg:w-12 lg:h-12 object-contain">
             <span class="text-lg font-[900] tracking-tighter uppercase text-indigo-600 ml-[-4px]">Masar</span>
         </a>
-        <div class="text-[11px] lg:text-sm font-bold text-slate-400">
-            <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-800 underline-offset-4">Sign in</a>
+
+        <div class="flex items-center gap-4 lg:gap-6">
+            <a href="javascript:history.back()"
+                class="flex items-center gap-1 text-[11px] lg:text-sm font-bold text-slate-400 hover:text-indigo-600 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 transform group-hover:-translate-x-1 transition-transform" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+
+            <span class="h-3 w-[1px] bg-slate-200"></span>
+
+            <div class="text-[11px] lg:text-sm font-bold">
+                <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-800 underline-offset-4">Sign
+                    in</a>
+            </div>
         </div>
     </nav>
 
@@ -117,7 +133,8 @@
                             <input type="checkbox" id="terms" required
                                 class="w-4 h-4 rounded border-slate-200 text-cyan-600">
                             <label for="terms" class="text-[11px] font-bold text-slate-500 cursor-pointer">
-                                I agree to the<span class="text-cyan-600 underline underline-offset-2">Terms & Privacy</span>
+                                I agree to the<span class="text-cyan-600 underline underline-offset-2">Terms &
+                                    Privacy</span>
                             </label>
                         </div>
 
@@ -138,7 +155,7 @@
                     <button
                         class="w-full mt-6 flex items-center justify-center gap-3 py-3 rounded-xl border border-slate-100 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all">
                         <img src="https://www.svgrepo.com/show/355037/google.svg" class="h-4 w-4" alt="Google">
-                       Sign up with Google
+                        Sign up with Google
                     </button>
                 </div>
             </div>
