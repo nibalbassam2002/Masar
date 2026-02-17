@@ -8,6 +8,8 @@ use App\Models\Workspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -91,4 +93,41 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         return redirect('/');
     }
+    // 1. توجيه المستخدم لصفحة جوجل
+public function redirectToGoogle()
+{
+    return Socialite::driver('google')->redirect();
+}
+
+// 2. استقبال بيانات المستخدم من جوجل
+public function handleGoogleCallback(Request $request)
+{
+    try {
+        $googleUser = Socialite::driver('google')->user();
+        
+        // البحث عن المستخدم في قاعدتنا عن طريق الـ google_id أو الإيميل
+        $user = User::where('google_id', $googleUser->id)
+                    ->orWhere('email', $googleUser->email)
+                    ->first();
+
+        if ($user) {
+            // إذا وجدناه، نحدث الـ google_id إذا لم يكن موجوداً
+            $user->update(['google_id' => $googleUser->id]);
+        } else {
+            // إذا لم نجده، ننشئ مستخدماً جديداً
+            $user = User::create([
+                'name' => $googleUser->name,
+                'email' => $googleUser->email,
+                'google_id' => $googleUser->id,
+                'password' => null, // لا يحتاج باسورد
+            ]);
+        }
+
+        Auth::login($user);
+        return $this->handleJoiningProject($user, $request);
+
+    } catch (Exception $e) {
+        return redirect('/login')->withErrors(['email' => 'Something went wrong with Google Login']);
+    }
+}
 }

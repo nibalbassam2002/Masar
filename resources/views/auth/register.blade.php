@@ -150,11 +150,13 @@
                             Access</span>
                     </div>
 
-                    <button
-                        class="w-full mt-6 flex items-center justify-center gap-3 py-3 rounded-xl border border-slate-100 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all">
-                        <img src="https://www.svgrepo.com/show/355037/google.svg" class="h-4 w-4" alt="Google">
-                        Sign up with Google
-                    </button>
+                    <div class="mt-6">
+                        <a href="{{ route('google.login') }}"
+                            class="flex items-center justify-center w-full gap-2 px-4 py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition font-semibold text-slate-700">
+                            <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-5 h-5" alt="Google">
+                            Continue with Google
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
