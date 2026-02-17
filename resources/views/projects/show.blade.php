@@ -14,6 +14,42 @@
                 font-family: 'Plus Jakarta Sans', sans-serif;
             }
 
+            /* styles.css - أضف هذا مع بقية التصميمات */
+            .back-button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+                /* يتناسب مع التصميم المدور للصفحة */
+                background-color: #f1f5f9;
+                /* نفس لون خلفية الأعمدة */
+                color: #475569;
+                /* لون رمادي */
+                margin-right: 16px;
+                /* مسافة بين السهم وعنوان المشروع */
+                transition: all 0.2s ease;
+                border: 1px solid #e2e8f0;
+                text-decoration: none;
+                /* لإزالة خط تحت السهم */
+            }
+
+            .back-button:hover {
+                background-color: #06b6d4;
+                /* اللون السماوي عند المرور */
+                color: white;
+                border-color: #06b6d4;
+                transform: translateX(-3px);
+                /* تأثير حركي لطيف */
+            }
+
+            .back-button svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* التعديلات الأساسية للتجاوب - بدون تغيير في التصميم الأصلي */
             .board-canvas {
                 display: flex;
                 flex-direction: row;
@@ -21,7 +57,29 @@
                 padding: 1.5rem;
                 height: calc(100vh - 120px);
                 overflow-x: auto;
+                overflow-y: hidden;
                 align-items: stretch;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* تحسين مظهر شريط التمرير */
+            .board-canvas::-webkit-scrollbar {
+                height: 6px;
+                width: 6px;
+            }
+
+            .board-canvas::-webkit-scrollbar-track {
+                background: #f1f5f9;
+                border-radius: 10px;
+            }
+
+            .board-canvas::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 10px;
+            }
+
+            .board-canvas::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
             }
 
             .column-node {
@@ -33,6 +91,7 @@
                 flex-direction: column;
                 border: 1px solid #e2e8f0;
                 max-height: 100%;
+                /* الحفاظ على نفس الأبعاد */
             }
 
             .task-container {
@@ -50,6 +109,8 @@
                 margin-bottom: 0.75rem;
                 transition: all 0.2s ease;
                 position: relative;
+                word-wrap: break-word;
+                /* لضمان عدم خروج النص */
             }
 
             .task-card[data-draggable="true"] {
@@ -81,25 +142,196 @@
                 background: #cbd5e1;
                 border-radius: 10px;
             }
+
+            /* تحسينات التجاوب - فقط إعادة ترتيب بدون تغيير التصميم */
+            @media (max-width: 768px) {
+                header {
+                    flex-wrap: wrap !important;
+                    padding: 1rem !important;
+                }
+
+                header>div:first-child {
+                    width: 100% !important;
+                    order: 1 !important;
+                }
+
+                header>div:last-child {
+                    width: 100% !important;
+                    order: 2 !important;
+                    justify-content: space-between !important;
+                    margin-top: 0.5rem !important;
+                }
+
+                .board-canvas {
+                    padding: 1rem !important;
+                    gap: 1rem !important;
+                }
+
+                .column-node {
+                    width: 280px !important;
+                    min-width: 280px !important;
+                }
+
+                .flex.items-center.gap-4 {
+                    width: 100% !important;
+                    justify-content: space-between !important;
+                }
+
+                /* تحسين عرض الفريق */
+                .flex.items-center.bg-slate-50 {
+                    flex: 1 !important;
+                    margin-right: 0.5rem !important;
+                }
+
+                .flex.items-center.bg-slate-50 span {
+                    margin-right: 0.5rem !important;
+                }
+
+                /* تحسين المودالات */
+                #quickViewModal .relative,
+                #inviteModal .relative {
+                    margin: 0.5rem !important;
+                    max-height: 90vh !important;
+                    overflow-y: auto !important;
+                }
+
+                #quickViewModal .p-8,
+                #inviteModal .p-8 {
+                    padding: 1.5rem !important;
+                }
+
+                /* إبقاء زر العرض المرئي ظاهراً على الموبايل */
+                .absolute.top-2.right-2 {
+                    opacity: 1 !important;
+                }
+
+                /* تحسين حجم الخط للموبايل */
+                .heading-font.text-xl {
+                    font-size: 1.1rem !important;
+                }
+
+                /* تحسين شريط التقدم */
+                .w-32.bg-slate-100 {
+                    width: 80px !important;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .column-node {
+                    width: 260px !important;
+                    min-width: 260px !important;
+                }
+
+                .board-canvas {
+                    padding: 0.75rem !important;
+                    gap: 0.75rem !important;
+                }
+
+                .task-card {
+                    padding: 0.75rem !important;
+                }
+
+                /* تصغير الصور */
+                .w-8.h-8 {
+                    width: 2rem !important;
+                    height: 2rem !important;
+                }
+
+                .w-6.h-6 {
+                    width: 1.25rem !important;
+                    height: 1.25rem !important;
+                }
+
+                .btn-primary {
+                    padding: 0.5rem 1rem !important;
+                    font-size: 0.65rem !important;
+                }
+            }
+
+            /* تحسين للشاشات الأفقية */
+            @media (max-height: 600px) and (orientation: landscape) {
+                .board-canvas {
+                    height: calc(100vh - 80px) !important;
+                }
+
+                header {
+                    padding: 0.5rem 1rem !important;
+                }
+
+                .task-container {
+                    max-height: calc(100vh - 180px) !important;
+                }
+            }
+
+            /* تحسين لللمس - بدون تغيير في الوظائف */
+            @media (hover: none) and (pointer: coarse) {
+                .task-card[data-draggable="true"]:active {
+                    background-color: #f0f9ff;
+                    transform: scale(0.99);
+                }
+
+                .absolute.top-2.right-2 {
+                    opacity: 1 !important;
+                }
+
+                .group-hover\:opacity-100 {
+                    opacity: 1 !important;
+                }
+            }
+
+            /* تحسين المودالات للشاشات الصغيرة */
+            #quickViewModal,
+            #inviteModal {
+                padding: 1rem !important;
+            }
+
+            /* منع النص من الخروج */
+            .line-clamp-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            /* تحسين عرض التاريخ */
+            .text-\[9px\] {
+                white-space: nowrap !important;
+            }
         </style>
 
         <header class="bg-white border-b border-slate-200 px-8 py-5 shrink-0 flex items-center justify-between">
-            <div>
-                <h1 class="heading-font text-xl font-800 text-slate-900 tracking-tight capitalize">{{ $project->name }}</h1>
+            <div class="flex items-center">
+                <!-- سهم الرجوع - تم إضافته هنا -->
+                <a href="{{ route('dashboard') }}" class="back-button" title="Back to Dashboard">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </a>
+                <div>
+                    <h1 class="heading-font text-xl font-800 text-slate-900 tracking-tight capitalize">{{ $project->name }}
+                    </h1>
 
-                @php
-                    $totalMissions = $project->tasks()->whereNull('parent_id')->count();
-                    $completedMissions = $project->tasks()->whereNull('parent_id')->where('status', 'done')->count();
-                    $percent = $totalMissions > 0 ? round(($completedMissions / $totalMissions) * 100) : 0;
-                @endphp
+                    @php
+                        $totalMissions = $project->tasks()->whereNull('parent_id')->count();
+                        $completedMissions = $project
+                            ->tasks()
+                            ->whereNull('parent_id')
+                            ->where('status', 'done')
+                            ->count();
+                        $percent = $totalMissions > 0 ? round(($completedMissions / $totalMissions) * 100) : 0;
+                    @endphp
 
-                <div class="mt-2 flex items-center gap-3">
-                    <div class="w-32 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-cyan-500 h-full transition-all duration-1000" style="width: {{ $percent }}%">
+                    <div class="mt-2 flex items-center gap-3">
+                        <div class="w-32 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-cyan-500 h-full transition-all duration-1000" id="progress-bar"
+                                style="width: {{ $percent }}%">
+                            </div>
                         </div>
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest"
+                            id="progress-percent">{{ $percent }}%
+                            Complete</span>
                     </div>
-                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $percent }}%
-                        Complete</span>
                 </div>
             </div>
 
@@ -130,19 +362,18 @@
 
                 @if ($isLeader)
                     <div class="flex items-center gap-2">
-
                         <a href="{{ route('tasks.create', $project->id) }}"
                             class="btn-primary !px-5 !py-2.5 text-[11px] shadow-cyan-100">New Task</a>
                     </div>
                 @endif
-                @if (auth()->user()->isSuperAdmin())
+                @if (auth()->user()->isSuperAdmin() || auth()->id() === $project->workspace->owner_id)
                     <a href="{{ route('projects.analytics', $project->id) }}"
                         class="w-10 h-10 bg-slate-50 text-slate-400 rounded-xl flex items-center justify-center hover:text-cyan-600 transition-all"
                         title="Quick Analytics">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                                stroke-width="2.5" />
+                        <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </a>
                 @endif
@@ -174,7 +405,7 @@
                                     data-draggable="{{ $isActuallyAssignedToMe ? 'true' : 'false' }}">
 
                                     <div
-                                        class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all z-20">
+                                        class="absolute top-2 right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all z-20">
                                         <button onclick="openQuickView({{ $task->id }})"
                                             class="w-7 h-7 bg-white shadow-md border border-slate-100 rounded-lg flex items-center justify-center text-slate-400 hover:text-cyan-500">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
@@ -236,7 +467,9 @@
         </div>
     </div>
 
+    <!-- المودالات - بدون تغيير -->
     <div id="quickViewModal" class="hidden fixed inset-0 z-[300] items-center justify-center p-6">
+        <!-- ... محتوى المودال كما هو ... -->
         <div class="absolute inset-0 bg-slate-950/20 backdrop-blur-sm" onclick="closeQuickView()"></div>
         <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg border border-slate-100 transform transition-all scale-95 opacity-0 overflow-hidden"
             id="quickViewContainer">
@@ -279,6 +512,7 @@
     </div>
 
     <div id="inviteModal" class="hidden fixed inset-0 z-[500] items-center justify-center p-6">
+        <!-- ... محتوى المودال كما هو ... -->
         <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="toggleModal('inviteModal', false)"></div>
         <div class="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-8 overflow-hidden">
             <h3 class="heading-font text-xl font-800 text-slate-900 mb-6 text-center italic">Invite Collaborator</h3>
@@ -308,8 +542,10 @@
         </div>
     </div>
 
+    <!-- السكريبتات - بدون تغيير -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
+        // نفس الكود الأصلي تماماً - بدون أي تغيير
         let currentTaskId = null;
 
         document.querySelectorAll('.task-container').forEach(el => {
@@ -439,30 +675,29 @@
                 status.classList.replace('text-slate-400', 'text-cyan-600');
             }
         }
-        // دالة حذف الملاحظة
-function deleteNote(noteId) {
-    if (!confirm('Are you sure you want to delete this message?')) return;
 
-    fetch(`/notes/${noteId}`, {
-        method: "DELETE",
-        headers: {
-            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-            "Accept": "application/json"
+        function deleteNote(noteId) {
+            if (!confirm('Are you sure you want to delete this message?')) return;
+
+            fetch(`/notes/${noteId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Accept": "application/json"
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        openQuickView(currentTaskId);
+                    } else {
+                        alert(data.error || "You don't have permission to delete this.");
+                    }
+                })
+                .catch(err => {
+                    console.error('Delete error:', err);
+                    alert("Connection error.");
+                });
         }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            // تحديث القائمة فوراً لإخفاء الملاحظة المحذوفة
-            openQuickView(currentTaskId);
-        } else {
-            alert(data.error || "You don't have permission to delete this.");
-        }
-    })
-    .catch(err => {
-        console.error('Delete error:', err);
-        alert("Connection error.");
-    });
-}
     </script>
 @endsection
