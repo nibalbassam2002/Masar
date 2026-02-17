@@ -97,11 +97,9 @@
                     </div>
                 </div>
 
-                <!-- العمود الأيسر (الإعدادات) - يظهر ثانياً في الموبايل -->
                 <div class="lg:col-span-4 space-y-5 order-2 lg:order-2">
                     <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-100 shadow-sm space-y-5 sm:space-y-6">
 
-                        <!-- اختيار المشروع -->
                         @if (!$project)
                             @if (!$project)
                                 <div class="pb-5 sm:pb-6 border-b border-slate-50">

@@ -53,7 +53,7 @@
 
                     <textarea name="content" rows="4" class="w-full bg-slate-50 border-none rounded-2xl p-5 text-xs font-medium outline-none focus:ring-4 focus:ring-cyan-500/5 transition-all" placeholder="Tell the lead what you've done..."></textarea>
                     
-                    <button type="submit" class="w-full bg-slate-900 text-white py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-cyan-600 transition-all shadow-lg mt-4">
+                    <button type="submit" class=" btn-primary ">
                         Submit Work / Update
                     </button>
                 </div>

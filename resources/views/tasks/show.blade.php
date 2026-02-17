@@ -72,7 +72,7 @@
                         @csrf
                         <textarea name="content" rows="3" required class="w-full bg-white border-none rounded-2xl p-4 text-xs font-medium outline-none focus:ring-4 focus:ring-cyan-500/5 transition-all mb-4" placeholder="Post a progress log..."></textarea>
                         <div class="flex justify-end">
-                            <button type="submit" class="bg-slate-900 text-white px-10 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-cyan-600 transition-all shadow-lg">Post Log</button>
+                            <button type="submit" class="btn-primary">Post Log</button>
                         </div>
                     </form>
                 </section>

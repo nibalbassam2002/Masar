@@ -72,14 +72,11 @@
         </div>
     </nav>
 
-    <!-- items-start ترفع المحتوى للأعلى في الموبايل -->
     <main class="flex-1 flex items-start lg:items-center justify-center p-4 lg:p-8">
 
-        <!-- mt-4 في الموبايل لرفع الفورم -->
         <div
             class="w-full max-w-[1000px] mt-4 lg:mt-0 grid grid-cols-1 lg:grid-cols-2 bg-white rounded-[2rem] lg:rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] overflow-hidden border border-slate-100">
 
-            <!-- الصورة تظهر في الشاشات الكبيرة فقط -->
             <div class="hidden lg:flex relative bg-slate-50 p-10 items-center justify-center">
                 <div
                     class="absolute top-0 right-0 w-80 h-80 bg-indigo-100/50 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2">

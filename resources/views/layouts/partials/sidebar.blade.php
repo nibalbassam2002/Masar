@@ -1,16 +1,12 @@
-<!-- 1. الخلفية المظلمة (Backdrop) - تظهر فقط في الموبايل عند فتح القائمة -->
 <div x-show="isSidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click="isSidebarOpen = false"
     class="fixed inset-0 bg-slate-900/60 z-[50] lg:hidden backdrop-blur-sm" x-cloak>
 </div>
 
-<!-- 2. القائمة الجانبية (Sidebar) -->
-<!-- أضفنا كلاسات التموضع للموبايل (fixed) وللابتوب (lg:static) -->
 <aside :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     class="fixed inset-y-0 left-0 z-[60] {{ $isCompact ?? false ? 'w-20' : 'w-72' }} bg-white border-r border-slate-100 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shrink-0 flex flex-col h-full shadow-2xl lg:shadow-none"
     :style="isCompact ? 'width: 5rem' : 'width: 18rem'">
-    <!-- زر تصغير القائمة (يظهر فقط في اللابتوب كما هو في كودك) -->
     <button @click="isCompact = !isCompact"
         class="hidden lg:flex absolute -right-3 top-11 w-6 h-6 bg-white border border-slate-200 rounded-full items-center justify-center text-slate-400 hover:text-cyan-500 shadow-sm z-[60] transition-all">
         <svg :class="isCompact ? 'rotate-180' : ''" class="w-3.5 h-3.5 transition-transform" fill="none"
@@ -19,7 +15,6 @@
         </svg>
     </button>
 
-    <!-- زر إغلاق القائمة (يظهر فقط في الموبايل) -->
     <button @click="isSidebarOpen = false"
         class="lg:hidden absolute right-4 top-10 p-2 text-slate-400 hover:text-rose-500 transition-all">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,7 +22,6 @@
         </svg>
     </button>
 
-    <!-- Logo Section -->
     <div class="p-6 h-28 flex items-center border-b border-slate-50 shrink-0">
         <div class="flex items-center gap-4">
             <div
@@ -41,7 +35,6 @@
         </div>
     </div>
 
-    <!-- Navigation (الروابط بقيت كما هي تماماً) -->
     <nav class="flex-1 px-4 py-8 space-y-8 overflow-y-auto custom-scroll">
         <div>
             <p x-show="!isCompact" class="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-300 mb-4">
