@@ -93,7 +93,15 @@
                         <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Start your journey
                             with Masar</p>
                     </header>
-
+                    @if ($errors->any())
+                        <div style="color: red; margin-bottom: 20px;">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ route('register') }}" method="POST" class="space-y-4">
                         @csrf
                         <input type="hidden" name="project_id" value="{{ request('project_id') }}">

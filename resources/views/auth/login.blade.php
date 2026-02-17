@@ -88,7 +88,15 @@
                         <h2 class="text-2xl lg:text-3xl font-[900] text-slate-900 mb-1">Welcome back.</h2>
                         <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Sign in to Masar</p>
                     </header>
-
+                    @if ($errors->any())
+                        <div style="color: red; margin-bottom: 20px;">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ route('login') }}" method="POST" class="space-y-4">
                         @csrf
                         <input type="hidden" name="project_id" value="{{ request('project_id') }}">
